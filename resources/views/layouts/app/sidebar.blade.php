@@ -13,7 +13,10 @@
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        {{ __('Inicio') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="cog-6-tooth" :href="route('ajustes')" :current="request()->routeIs('ajustes')" wire:navigate>
+                        {{ __('Ajustes') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
