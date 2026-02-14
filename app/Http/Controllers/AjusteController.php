@@ -10,4 +10,14 @@ class AjusteController extends Controller
     {
         return view('admin.ajustes.index');
     }
+
+    public function store(Request $request)
+    {
+        // return response()->json($request->all());
+
+        //validar los datos
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+        ]);
+    }
 }

@@ -14,4 +14,6 @@ require __DIR__.'/settings.php';
 
 // Rutas para ajustes
 Route::get('/admin/ajustes', [App\Http\Controllers\AjusteController::class, 'index'])->name('admin.ajustes.index');
+Route::post('/admin/ajustes', [App\Http\Controllers\AjusteController::class, 'store'])->name('admin.ajustes.store');
+
 
