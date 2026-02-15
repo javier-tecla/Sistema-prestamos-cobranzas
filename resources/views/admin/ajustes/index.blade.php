@@ -60,18 +60,11 @@
                         <flux:label>Divisa <sup class="text-red-500 ml-1" title="Campo obligatorio">(*)</sup>
                         </flux:label>
                         <flux:select placeholder="Selecciona una divisa..." name="divisa" required>
-
-                            {{-- @foreach ($divisas as $divisa) --}}
-
-                            <flux:select.option value="ARS">Pesos Argentinos
-                                {{-- <flux:select.option value="{{ $divisa['symbol'] }}">{{ $divisa['name'] }} --}}
-
-                            </flux:select.option>
-
-                            {{-- @endforeach --}}
-
+                            @foreach ($divisas as $divisa)
+                                    <flux:select.option value="{{ $divisa['symbol'] }}">{{ $divisa['name'] }}
+                                    </flux:select.option>
+                            @endforeach
                         </flux:select>
-
                     </div>
 
                     <div class="mb-4">
@@ -85,6 +78,12 @@
                         <flux:label>Tasa de Mora (%)</flux:label>
                         <flux:input name="mora" type="number" step="0.01" icon="clock" placeholder="2.00" />
                         <flux:error name="mora" />
+                    </div>
+
+                    <div class="mb-4">
+                        <flux:label>Sitio Web</flux:label>
+                        <flux:input name="web" icon="globe-alt" placeholder="www.empresa.com" />
+                        <flux:error name="web" />
                     </div>
 
                     <div class="mb-4">
@@ -123,11 +122,7 @@
 
                     </div>
 
-                    <div class="mb-4">
-                        <flux:label>Sitio Web</flux:label>
-                        <flux:input name="web" icon="globe-alt" placeholder="www.empresa.com" />
-                        <flux:error name="web" />
-                    </div>
+
 
                 </div>
             </div>
