@@ -9,7 +9,7 @@
     <div
         class="bg-white dark:bg-neutral-800 border-t border-gray-200 dark:order-gray-700 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
 
-        <form action="{{ url('/admin/ajustes') }}" method="POST">
+        <form action="{{ url('/admin/ajustes') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- Body --}}
             <div class="p-6">
@@ -61,8 +61,8 @@
                         </flux:label>
                         <flux:select placeholder="Selecciona una divisa..." name="divisa" required>
                             @foreach ($divisas as $divisa)
-                                    <flux:select.option value="{{ $divisa['symbol'] }}">{{ $divisa['name'] }}
-                                    </flux:select.option>
+                                <flux:select.option value="{{ $divisa['symbol'] }}">{{ $divisa['name'] }}
+                                </flux:select.option>
                             @endforeach
                         </flux:select>
                     </div>
