@@ -14,4 +14,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 @fluxAppearance

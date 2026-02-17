@@ -16,7 +16,7 @@ beforeEach(function () {
 });
 
 test('two factor settings page can be rendered', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->withoutTwoFactor()->create();
 
     $this->actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
@@ -58,7 +58,7 @@ test('two factor authentication disabled when confirmation abandoned between req
 
     $this->actingAs($user);
 
-    $component = Livewire::test('pages::settings.two-factor');
+    $component = Livewire::test('settings.two-factor');
 
     $component->assertSet('twoFactorEnabled', false);
 
