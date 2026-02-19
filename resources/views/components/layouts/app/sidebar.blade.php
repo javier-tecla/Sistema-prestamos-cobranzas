@@ -20,6 +20,9 @@
                 <flux:navlist.item icon="cog-6-tooth" :href="route('admin.ajustes.index')"
                     :current="request()->routeIs('admin.ajustes.index')" wire:navigate>{{ __('Ajustes') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="shield-check" :href="route('admin.roles.index')"
+                    :current="request()->routeIs('admin.roles.index')" wire:navigate>{{ __('Roles') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 
