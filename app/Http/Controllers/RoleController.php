@@ -37,8 +37,12 @@ class RoleController extends Controller
         ]);
 
         $rol = new Role();
-        $rol->name = $request->name;
+        $rol->name = strtoupper($request->name);
         $rol->save();
+
+        return redirect()->route('admin.roles.index')
+            ->with('mensaje', 'Rol guardado correctamente')
+            ->with('icono', 'success');
 
         
 
