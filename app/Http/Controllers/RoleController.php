@@ -23,7 +23,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.roles.create');
     }
 
     /**
@@ -31,7 +31,17 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return response()->json($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,',
+        ]);
+
+        $rol = new Role();
+        $rol->name = $request->name;
+        $rol->save();
+
+        
+
     }
 
     /**
