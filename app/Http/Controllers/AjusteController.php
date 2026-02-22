@@ -10,7 +10,7 @@ class AjusteController extends Controller
 {
     public function index(){
 
-        $ajuste = Ajuste::first();
+        $ajuste = Ajuste::first() ?? new Ajuste();
 
         $jsonData = file_get_contents('https://api.hilariweb.com/divisas');
         $divisas = json_decode($jsonData, true);
@@ -28,7 +28,7 @@ class AjusteController extends Controller
             'telefono' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'divisa' => 'required|string|max:10',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,avif|max:2048',
             'web' => 'nullable|string|max:255',
             'interes' => 'nullable|numeric|min:0|max:100',
             'mora' => 'nullable|numeric|min:0|max:100',

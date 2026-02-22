@@ -62,7 +62,7 @@
                                 (*)</span></flux:label>
                         <flux:select placeholder="Selecciona una divisa..." name="divisa" required>
                             @foreach ($divisas as $divisa)
-                                <flux:select.option value="{{ $divisa['symbol'] }}"
+                                <flux:select.option value="{{ $divisa['symbol'] ?? '' }}"
                                     :selected="$ajuste->divisa == $divisa['symbol']">{{ $divisa['name'] }}
                                 </flux:select.option>
                             @endforeach
