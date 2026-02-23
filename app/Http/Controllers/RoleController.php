@@ -44,8 +44,6 @@ class RoleController extends Controller
             ->with('mensaje', 'Rol guardado correctamente')
             ->with('icono', 'success');
 
-        
-
     }
 
     /**
@@ -63,7 +61,8 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rol = Role::find($id);
+        return view('admin.roles.edit', compact('rol'));
     }
 
     /**
@@ -71,7 +70,18 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // return response()->json($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,' . $id,
+        ]);
+
+        $rol = Role::find($id);
+        $rol->name = $request->name;
+        $rol->save();
+
+        return redirect()->route('admin.roles.index')
+            ->with('mensaje', 'Rol actualizado correctamente')
+            ->with('icono', 'success');
     }
 
     /**
