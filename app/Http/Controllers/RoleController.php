@@ -89,6 +89,12 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // echo "Eliminando el rol con el ID: " . $id;
+        $rol = Role::find($id);
+        $rol->delete();
+
+        return redirect()->route('admin.roles.index')
+            ->with('mensaje', 'Rol eliminado correctamente')
+            ->with('icono', 'success');
     }
 }
