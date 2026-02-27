@@ -23,6 +23,9 @@
                 <flux:navlist.item icon="shield-check" :href="route('admin.roles.index')"
                     :current="request()->routeIs('admin.roles.index')" wire:navigate>{{ __('Roles') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="users" :href="route('admin.usuarios.index')"
+                    :current="request()->routeIs('admin.usuarios.index')" wire:navigate>{{ __('Usuarios') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ajuste;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Javier Borjas',
             'email' => 'cristman11@gmail.com',
+            'password' => bcrypt('123456789'),
             'nombres' => 'Javier',
             'apellidos' => 'Borjas',
             'tipo_documento' => 'DNI',
@@ -37,6 +39,19 @@ class DatabaseSeeder extends Seeder
             'contacto_telefono' => '987654321',
             'contacto_relacion' => 'Friend',
             'estado' => 'Activo',
+        ]);
+
+        Ajuste::create([
+            'nombre' => 'Prestamos del sur',
+            'descripcion' => 'Empresa de prestamos y cobranzas',
+            'direccion' => 'Mitre 245',
+            'telefono' => '1136251489',
+            'email' => 'prestamos@delsur.com',
+            'divisa' => 'AR$',
+            'logo' => null,
+            'web' => 'https://www.prestamosdelsur.com',
+            'interes' => 10.00,
+            'mora' => 2.00,
         ]);
     }
 }
