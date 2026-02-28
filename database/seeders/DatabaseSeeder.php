@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             'contacto_telefono' => '987654321',
             'contacto_relacion' => 'Friend',
             'estado' => 'Activo',
-        ]);
+        ])->assignRole('SUPER ADMINISTRADOR');
 
         Ajuste::create([
             'nombre' => 'Prestamos del sur',

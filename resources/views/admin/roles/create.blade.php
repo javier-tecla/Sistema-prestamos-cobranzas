@@ -23,7 +23,7 @@
                         <flux:field>
                             <flux:label class="flex items-center gap-1">Nombre del rol <span class="text-red-500" title="Campo obligatorio">(*)</span>
                             </flux:label>
-                            <flux:input name="name" icon="shield-check" placeholder="Nombre del rol..."
+                            <flux:input name="name" icon="shield-check" value="{{ old('name') }}" placeholder="Nombre del rol..."
                                 class="w-full" required />
                             <flux:error name="name" />
                         </flux:field>

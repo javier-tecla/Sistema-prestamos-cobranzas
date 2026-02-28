@@ -48,7 +48,8 @@
                             {{ $loop->iteration }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            </td>
+                            {{ $usuario->roles->pluck('name')->join(', ') }}
+                        </td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                             {{ $usuario->name }}</td>
@@ -57,7 +58,7 @@
                             {{ $usuario->email }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{$usuario->tipo_documento." ".$usuario->numero_documento }}</td>
+                            {{ $usuario->tipo_documento . ' ' . $usuario->numero_documento }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                             {{ $usuario->celular }}</td>
@@ -114,7 +115,5 @@
     {{-- <div class="py-4 flex justify-center">
 
     </div> --}}
-
-
 
 </x-layouts.app>
