@@ -1,11 +1,16 @@
 <x-layouts.app title="Ajustes del sistema">
-    <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ url('admin/roles') }}">Listado de Roles</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item>Creación de un nuevo rol</flux:breadcrumbs.item>
-    </flux:breadcrumbs>
-    <br>
-    <flux:separator variant="subtle" />
+    <div class="relative mb-6 w-full">
+        <div class="flex items-center justify-between mb-4">
+            <flux:heading size="xl" level="1">Creación de un Nuevo Rol</flux:heading>
+            <br>
+            <flux:breadcrumbs>
+                <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item href="{{ url('admin/roles') }}">Listado de roles</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Creación de rol</flux:breadcrumbs.item>
+            </flux:breadcrumbs>
+        </div>
+        <flux:separator variant="subtle" />
+    </div>
     <br>
 
     {{-- Card --}}
@@ -21,7 +26,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="mb-4">
                         <flux:field>
-                            <flux:label class="flex items-center gap-1">Nombre del rol <span class="text-red-500" title="Campo obligatorio">(*)</span>
+                            <flux:label class="flex items-center gap-1">Nombre del rol <sup class="text-red-500" title="Campo obligatorio">(*)</sup>
                             </flux:label>
                             <flux:input name="name" icon="shield-check" value="{{ old('name') }}" placeholder="Nombre del rol..."
                                 class="w-full" required />

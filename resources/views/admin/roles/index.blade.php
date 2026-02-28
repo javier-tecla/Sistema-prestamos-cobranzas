@@ -1,7 +1,14 @@
 <x-layouts.app title="Roles del sistema">
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">Roles del sistema</flux:heading>
-        <br>
+        <div class="flex items-center justify-between mb-4">
+            <flux:heading size="xl" level="1">Listado de Roles</flux:heading>
+            <br>
+            <flux:breadcrumbs>
+                <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Listado de roles</flux:breadcrumbs.item>
+            </flux:breadcrumbs>
+        </div>
+
         <flux:separator variant="subtle" />
     </div>
 

@@ -1,10 +1,17 @@
 <x-layouts.app title="Ajustes del sistema">
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">Ajustes del sistema</flux:heading>
-        <br>
+        <div class="flex items-center justify-between mb-4">
+            <flux:heading size="xl" level="1">Ajustes del Sistema</flux:heading>
+            <br>
+            <flux:breadcrumbs>
+                <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Ajustes del sistema</flux:breadcrumbs.item>
+            </flux:breadcrumbs>
+        </div>
+
         <flux:separator variant="subtle" />
     </div>
-
+    <br>
 
     {{-- Card --}}
     <div
@@ -19,51 +26,55 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div class="mb-4">
-                        <flux:label>Nombre de la Empresa <span class="text-red-500" title="Campo obligatorio">
-                                (*)</span></flux:label>
-                        <flux:input name="nombre" icon="building-office" value="{{ old('descripcion', $ajuste->nombre ?? '') }}"
-                            placeholder="Nombre Comercial" required />
+                        <flux:label>Nombre de la Empresa <sup class="text-red-500" title="Campo obligatorio">(*)</sup>
+                        </flux:label>
+                        <flux:input name="nombre" icon="building-office"
+                            value="{{ old('descripcion', $ajuste->nombre ?? '') }}" placeholder="Nombre Comercial"
+                            required />
                         <flux:error name="nombre" />
                     </div>
 
                     <div class="mb-4">
                         <flux:label>Descripción</flux:label>
-                        <flux:input name="descripcion" value="{{ old('descripcion', $ajuste->descripcion ?? '') }}" icon="document-text"
-                            placeholder="Breve reseña de la empresa..." />
+                        <flux:input name="descripcion" value="{{ old('descripcion', $ajuste->descripcion ?? '') }}"
+                            icon="document-text" placeholder="Breve reseña de la empresa..." />
                         <flux:error name="descripcion" />
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Dirección <span class="text-red-500" title="Campo obligatorio">
-                                (*)</span></flux:label>
-                        <flux:input name="direccion" icon="map-pin" value="{{ old('direccion', $ajuste->direccion ?? '') }}"
+                        <flux:label>Dirección <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
+                        <flux:input name="direccion" icon="map-pin"
+                            value="{{ old('direccion', $ajuste->direccion ?? '') }}"
                             placeholder="Dirección física de la empresa" required />
                         <flux:error name="direccion" />
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Teléfono <span class="text-red-500" title="Campo obligatorio">
-                                (*)</span></flux:label>
-                        <flux:input name="telefono" icon="phone" value="{{ old('telefono', $ajuste->telefono ?? '') }}"
-                            placeholder="Número de contacto" required />
+                        <flux:label>Teléfono <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
+                        <flux:input name="telefono" icon="phone"
+                            value="{{ old('telefono', $ajuste->telefono ?? '') }}" placeholder="Número de contacto"
+                            required />
                         <flux:error name="telefono" />
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Email de Contacto <span class="text-red-500" title="Campo obligatorio">
-                                (*)</span></flux:label>
-                        <flux:input name="email" type="email" value="{{ old('email', $ajuste->email ?? '' }}") icon="envelope"
-                            placeholder="Email de contacto" required />
+                        <flux:label>Email de Contacto <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
+                        <flux:input name="email" type="email" value="{{ old('email', $ajuste->email ?? '') }}"
+                            icon="envelope" placeholder="Email de contacto" required />
                         <flux:error name="email" />
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Divisa <span class="text-red-500" title="Campo obligatorio">
-                                (*)</span></flux:label>
+                        <flux:label>Divisa <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                         <flux:select placeholder="Selecciona una divisa..." name="divisa" required>
                             @foreach ($divisas as $divisa)
                                 <flux:select.option value="{{ $divisa['symbol'] ?? '' }}"
-                                    :selected="old('divisa', $ajuste->divisa ?? '') == $divisa['symbol']">{{ $divisa['name'] }}
+                                    :selected="old('divisa', $ajuste->divisa ?? '') == $divisa['symbol']">
+                                    {{ $divisa['name'] }}
                                 </flux:select.option>
                             @endforeach
                         </flux:select>
@@ -71,15 +82,15 @@
 
                     <div class="mb-4">
                         <flux:label>Tasa de Interés (%)</flux:label>
-                        <flux:input name="interes" type="number" value="{{ old('interes', $ajuste->interes ?? '') }}" step="0.01"
-                            icon="receipt-percent" placeholder="10.00" />
+                        <flux:input name="interes" type="number" value="{{ old('interes', $ajuste->interes ?? '') }}"
+                            step="0.01" icon="receipt-percent" placeholder="10.00" />
                         <flux:error name="interes" />
                     </div>
 
                     <div class="mb-4">
                         <flux:label>Tasa de Mora (%)</flux:label>
-                        <flux:input name="mora" type="number" value="{{ old('mora', $ajuste->mora ?? '') }}" step="0.01"
-                            icon="clock" placeholder="2.00" />
+                        <flux:input name="mora" type="number" value="{{ old('mora', $ajuste->mora ?? '') }}"
+                            step="0.01" icon="clock" placeholder="2.00" />
                         <flux:error name="mora" />
                     </div>
 
