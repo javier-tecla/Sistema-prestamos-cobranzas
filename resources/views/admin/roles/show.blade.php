@@ -1,11 +1,17 @@
-<x-layouts.app title="Ajustes del sistema">
-    <flux:breadcrumbs>
-        <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item href="{{ url('admin/roles') }}">Listado de Roles</flux:breadcrumbs.item>
-        <flux:breadcrumbs.item>Datos del rol: {{ Str::lower($rol->name) }}</flux:breadcrumbs.item>
-    </flux:breadcrumbs>
-    <br>
-    <flux:separator variant="subtle" />
+<x-layouts.app title="Datos del rol">
+
+    <div class="relative mb-6 w-full">
+        <div class="flex items-center justify-between mb-4">
+            <flux:heading size="xl" level="1">Datos del Rol</flux:heading>
+            <br>
+            <flux:breadcrumbs>
+                <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item href="{{ url('admin/roles') }}">Listado de roles</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Datos del rol: {{ Str::lower($rol->name) }}</flux:breadcrumbs.item>
+            </flux:breadcrumbs>
+        </div>
+        <flux:separator variant="subtle" />
+    </div>
     <br>
 
     {{-- Card --}}

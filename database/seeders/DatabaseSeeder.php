@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'PRESTAMISTA']);
         Role::create(['name' => 'FACTURADOR']);
         Role::create(['name' => 'COBRADOR']);
+        Role::create(['name' => 'CLIENTE']);
 
         User::factory()->create([
             'name' => 'Javier Borjas',
