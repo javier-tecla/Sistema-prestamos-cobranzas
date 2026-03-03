@@ -18,8 +18,10 @@
 
     <div
         class="bg-white dark:bg-neutral-800 border-t border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-        <form action="{{ url('/admin/usuarios/create') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
+
             <div class="p-6">
                 <div class="mb-8">
                     <flux:heading level="2" size="lg" class="mb-4 text-blue-600">Datos de Cuenta
@@ -46,14 +48,14 @@
                         <div class="mb-4">
                             <flux:label>Contraseña <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="password" type="password" icon="key" placeholder="••••••••"
-                                required />
+                                />
                             <flux:error name="password" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Confirmar Contraseña <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="password_confirmation" type="password" icon="key"
-                                placeholder="••••••••" required />
+                                placeholder="••••••••" />
                             <flux:error name="password_confirmation" />
                         </div>
                     </div>
@@ -80,57 +82,56 @@
                         <div class="mb-4">
                             <flux:label>Tipo Documento <span class="text-red-500">(*)</span></flux:label>
                             <flux:select name="tipo_documento" required>
-                                <option value="" disabled selected>Seleccione...</option>
-                                <option value="DNI">DNI</option>
-                                <option value="Pasaporte">Pasaporte</option>
-                                <option value="Carnet de Extranjería">Carnet de Extranjería</option>
-                                <option value="RUC">RUC</option>
-                                <option value="Carnet de identidad">Carnet de identidad</option>
+                                @foreach (['DNI', 'Pasaporte', 'Carnet de Extranjería', 'RUC', 'Carnet de identidad'] as $tipo)
+                                    <option value="{{ $tipo }}"
+                                    {{ old('tipo_documento', $usuario->tipo_documento) == $tipo ? 'selected' : '' }}>
+                                    {{ $tipo }}</option>
+                                |@endforeach
                             </flux:select>
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Nro Documento <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="numero_documento" icon="identification" placeholder="12345678" required
-                                value="{{ old('numero_documento') }}" />
+                                value="{{ old('numero_documento', $usuario->numero_documento) }}" />
                             <flux:error name="numero_documento" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Celular <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="celular" icon="phone" placeholder="999 999 999" required
-                                value="{{ old('celular') }}" />
+                                value="{{ old('celular', $usuario->celular) }}" />
                             <flux:error name="celular" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Fecha Nacimiento <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="fecha_nacimiento" type="date" required
-                                value="{{ old('fecha_nacimiento') }}" />
+                                value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento) }}" />
                             <flux:error name="fecha_nacimiento" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Género <span class="text-red-500">(*)</span></flux:label>
                             <flux:select name="genero" required>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
+                                <option value="Masculino"{{ old('genero', $usuario->genero) == 'Maculino' ? 'selected' : '' }}>Masculino</option>
+                                <option value="Femenino"{{ old('genero', $usuario->genero) == 'Femenino' ? 'selected' : '' }}>Femenino</option>
                             </flux:select>
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Estado <span class="text-red-500">(*)</span></flux:label>
                             <flux:select name="estado">
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
+                                <option value="Activo"{{ old('genero', $usuario->estado) == 'Activo' ? 'selected' : '' }}>Activo</option>
+                                <option value="Inactivo"{{ old('genero', $usuario->estado) == 'Inactivo' ? 'selected' : '' }}>Inactivo</option>
                             </flux:select>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <flux:label>Dirección de Domicilio <span class="text-red-500">(*)</span></flux:label>
-                        <flux:input name="direccion" icon="map-pin" placeholder="Av. Siempre viva 123..." required
-                            value="{{ old('direccion') }}" />
+                        <flux:input name="direccion" icon="map-pin" required
+                            value="{{ old('direccion', $usuario->direccion) }}" />
                     </div>
                 </div>
 
@@ -146,13 +147,13 @@
                         <div class="space-y-4">
                             <flux:label>Nombre Completo<span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_nombre" placeholder="Ej: María Pérez" required
-                                value="{{ old('contacto_nombre') }}" />
+                                value="{{ old('contacto_nombre', $usuario->contacto_nombre) }}" />
                             <flux:label>Teléfono de contacto <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_telefono" placeholder="987 654 321" required
-                                value="{{ old('contacto_telefono') }}" />
+                                value="{{ old('contacto_telefono', $usuario->contacto_telefono) }}" />
                             <flux:label>Relación / Parentesco <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_relacion" placeholder="Ej: Madre, Cónyuge" required
-                                value="{{ old('contacto_relacion') }}" />
+                                value="{{ old('contacto_relacion', $usuario->contacto_relacion) }}" />
                         </div>
                     </div>
 
@@ -165,10 +166,10 @@
                             <div class="relative group">
                                 <div
                                     class="h-24 w-24 rounded-full border-2 border-dashed border-slate-300 overflow-hidden bg-slate-50 flex items-center justify-center">
-                                    <img id="image-preview" src="#" alt="Preview"
-                                        class="hidden h-full w-full object-cover">
+                                    <img id="image-preview" src="{{ $usuario->foto_perfil ? asset('storage/' . $usuario->foto_perfil) : '#' }}" alt="Preview"
+                                        class="{{ $usuario->foto_perfil ? '' : 'hidden'}} h-full w-full object-cover">
                                     <flux:icon id="placeholder-icon" name="user"
-                                        class="text-slate-300 h-10 w-10" />
+                                        class="{{ $usuario->foto_perfil ? 'hidden' : '' }} text-slate-300 h-10 w-10" />
                                 </div>
                             </div>
                             <div class="flex-1">
@@ -177,10 +178,9 @@
                                 <label for="foto-input"
                                     class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold hover:bg-slate-50 transition-all">
                                     <flux:icon name="cloud-arrow-up" class="text-gray-600" variant="micro" />
-                                    <span class="text-gray-600">Subir Foto</span>
+                                    <span class="text-gray-600">Cambiart Foto</span>
                                 </label>
-                                <p id="file-name" class="text-xs text-slate-400 mt-2 italic">Formatos: JPG, PNG (Max.
-                                    2MB)</p>
+                                <p id="file-name" class="text-xs text-slate-400 mt-2 italic">Mantener actual si no se sube una nueva.</p>
                             </div>
                         </div>
                         <flux:error name="foto_perfil" />
@@ -197,7 +197,7 @@
                         <i class="fas fa-arrow-left mr-2"></i> Volver
                     </a>
                     <flux:button variant="primary" type="submit" color="blue" class="px-5 cursor-pointer">
-                        <i class="fas fa-save mr-2"></i> Registrar Usuario
+                        <i class="fas fa-sync-alt mr-2"></i> Actualizar Usuario
                     </flux:button>
                 </div>
             </div>
