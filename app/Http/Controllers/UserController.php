@@ -98,7 +98,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // echo "editando el usuario con ID: " . $id;
+        $usuario = User::findOrFail($id);
+        $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR')->get();
+        return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
     /**
