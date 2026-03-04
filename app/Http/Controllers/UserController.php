@@ -163,6 +163,15 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // echo "Eliminar usuario con ID: " . $id;
+        $usuario = User::findOrFail($id);
+        $usuario->estado = 'Inactivo';
+        $usuario->save();
+
+        $usuario->delete();
+
+        return redirect()->route('admin.usuarios.index')
+            ->with('mensaje', 'Usuario eliminado correctamente')
+            ->with('icono', 'success');
     }
 }
