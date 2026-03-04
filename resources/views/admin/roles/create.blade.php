@@ -1,4 +1,4 @@
-<x-layouts.app title="Creación de rol">
+<x-layouts::app title="Creación de rol">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Creación de un Nuevo Rol</flux:heading>
@@ -94,4 +94,4 @@
     </script>
 
 
-</x-layouts.app>
+</x-layouts::app>

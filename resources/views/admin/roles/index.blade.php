@@ -1,4 +1,4 @@
-<x-layouts.app title="Roles del sistema">
+<x-layouts::app title="Roles del sistema">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Listado de Roles</flux:heading>
@@ -100,4 +100,4 @@
 
 
 
-</x-layouts.app>
+</x-layouts::app>

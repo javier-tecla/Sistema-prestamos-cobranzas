@@ -1,4 +1,4 @@
-<x-layouts.app title="Datos del rol">
+<x-layouts::app title="Datos del rol">
 
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
@@ -95,4 +95,4 @@
     </script>
 
 
-</x-layouts.app>
+</x-layouts::app>

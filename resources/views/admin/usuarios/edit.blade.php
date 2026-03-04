@@ -1,4 +1,4 @@
-<x-layouts.app title="Registrar Nuevo Usuario">
+<x-layouts::app title="Registrar Nuevo Usuario">
 
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
@@ -223,4 +223,4 @@
             }
         });
     </script>
-</x-layouts.app>
+</x-layouts::app>

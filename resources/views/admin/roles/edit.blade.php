@@ -1,4 +1,4 @@
-<x-layouts.app title="Modificar rol">
+<x-layouts::app title="Modificar rol">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Modificar Rol</flux:heading>
@@ -95,4 +95,4 @@
     </script>
 
 
-</x-layouts.app>
+</x-layouts::app>

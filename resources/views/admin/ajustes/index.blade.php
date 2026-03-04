@@ -1,4 +1,4 @@
-<x-layouts.app title="Ajustes del sistema">
+<x-layouts::app title="Ajustes del sistema">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Ajustes del Sistema</flux:heading>
@@ -214,4 +214,4 @@
     </script>
 
 
-</x-layouts.app>
+</x-layouts::app>

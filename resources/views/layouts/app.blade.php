@@ -1,4 +1,4 @@
-<x-layouts.app.sidebar :title="$title ?? null">
+<x-layouts::app.sidebar :title="$title ?? null">
     <flux:main>
         {{ $slot }}
         @if (($mensaje = Session::get('mensaje')) && ($icono = Session::get('icono')))
@@ -13,4 +13,4 @@
             </script>
         @endif
     </flux:main>
-</x-layouts.app.sidebar>
+</x-layouts::app.sidebar>

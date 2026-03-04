@@ -1,4 +1,4 @@
-<x-layouts.app title="Datos del usuario">
+<x-layouts::app title="Datos del usuario">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Datos del Usuario</flux:heading>
@@ -331,4 +331,4 @@
 
 
 
-</x-layouts.app>
+</x-layouts::app>
