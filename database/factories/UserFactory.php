@@ -32,6 +32,20 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
+
+            // Agrega estos campos obligatorios para que los tests no fallen:
+            'nombres' => fake()->firstName(),
+            'apellidos' => fake()->lastName(),
+            'tipo_documento' => 'DNI',
+            'numero_documento' => fake()->unique()->numerify('########'),
+            'celular' => fake()->phoneNumber(),
+            'direccion' => fake()->address(),
+            'fecha_nacimiento' => fake()->date(),
+            'genero' => fake()->randomElement(['Masculino', 'Femenino']),
+            'contacto_nombre' => fake()->name(),
+            'contacto_telefono' => fake()->phoneNumber(),
+            'contacto_relacion' => 'Familiar',
+            'estado' => 'Activo',
         ];
     }
 
