@@ -13,8 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $usuarios = User::all();
-
+        $usuarios = User::withTrashed()->get();
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
@@ -80,6 +79,19 @@ class UserController extends Controller
 
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario creado exitosamente')
+            ->with('icono', 'success');
+    }
+
+    public function restaurar($id)
+    {
+        // echo "Restaurar usuario con ID: ". $id;
+        $usuario = User::withTrashed()->findOrFail($id);
+        $usuario->restore();
+        $usuario->estado = 'Activo';
+        $usuario->save();
+
+        return redirect()->route('admin.usuarios.index')
+            ->with('mensaje', 'Usuario restaurado correctamente')
             ->with('icono', 'success');
     }
 

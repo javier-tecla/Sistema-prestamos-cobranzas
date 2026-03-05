@@ -44,6 +44,9 @@
                         Celular</th>
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Estado</th>
+                    <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Acciones</th>
                 </tr>
             </thead>
@@ -69,25 +72,29 @@
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                             {{ $usuario->celular }}</td>
+                        <td
+                            class="text-center px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                            @if ($usuario->deleted_at)
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Inactivo
+                                </span>
+                            @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Activo
+                                </span>
+                            @endif
+                        </td>
                         <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">
-                            <div class="flex justify-center gap-2">
-                                <a href="{{ url('/admin/usuario/' . $usuario->id) }}"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-eye mr-2"></i> Ver
-                                </a>
-                                <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}"
-                                    class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-pencil-alt mr-2"></i> Editar
-                                </a>
-
-                                <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="post"
+                            @if ($usuario->deleted_at)
+                                <form action="{{ url('/admin/usuario/' . $usuario->id .'/restaurar') }}" method="post"
                                     id="miFormulario{{ $usuario->id }}">
                                     @csrf
-                                    @method('DELETE')
                                     <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
+                                        class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold rounded transition"
                                         onclick="preguntar{{ $usuario->id }}(event)">
-                                        <i class="fas fa-trash-alt mr-2"></i> Eliminar
+                                        <i class="fas fa-undo-alt mr-2"></i>Restaurar
                                     </button>
                                 </form>
 
@@ -96,12 +103,12 @@
                                         event.preventDefault();
 
                                         Swal.fire({
-                                            title: '¿Desea eliminar este registro?',
+                                            title: '¿Desea restaurar este registro?',
                                             text: '',
                                             icon: 'question',
                                             showDenyButton: true,
-                                            confirmButtonText: 'Eliminar',
-                                            confirmButtonColor: '#a5161d',
+                                            confirmButtonText: 'Restaurar',
+                                            confirmButtonColor: '#F0B100',
                                             denyButtonColor: '#270a0a',
                                             denyButtonText: 'Cancelar',
                                         }).then((result) => {
@@ -112,7 +119,51 @@
                                         });
                                     }
                                 </script>
-                            </div>
+                            @else
+                                <div class="flex justify-center gap-2">
+                                    <a href="{{ url('/admin/usuario/' . $usuario->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
+                                        <i class="fas fa-eye mr-2"></i> Ver
+                                    </a>
+                                    <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}"
+                                        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
+                                        <i class="fas fa-pencil-alt mr-2"></i> Editar
+                                    </a>
+
+                                    <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="post"
+                                        id="miFormulario{{ $usuario->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
+                                            onclick="preguntar{{ $usuario->id }}(event)">
+                                            <i class="fas fa-trash-alt mr-2"></i> Eliminar
+                                        </button>
+                                    </form>
+
+                                    <script>
+                                        function preguntar{{ $usuario->id }}(event) {
+                                            event.preventDefault();
+
+                                            Swal.fire({
+                                                title: '¿Desea eliminar este registro?',
+                                                text: '',
+                                                icon: 'question',
+                                                showDenyButton: true,
+                                                confirmButtonText: 'Eliminar',
+                                                confirmButtonColor: '#a5161d',
+                                                denyButtonColor: '#270a0a',
+                                                denyButtonText: 'Cancelar',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // JavaScript puro para enviar el formulario
+                                                    document.getElementById('miFormulario{{ $usuario->id }}').submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                </div>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
