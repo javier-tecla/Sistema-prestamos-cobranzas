@@ -23,23 +23,23 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'COBRADOR']);
         Role::create(['name' => 'CLIENTE']);
 
-        User::factory()->create([
+        User::create([
             'name' => 'Javier Borjas',
             'email' => 'cristman11@gmail.com',
             'password' => bcrypt('123456789'),
-            'nombres' => 'Javier',
-            'apellidos' => 'Borjas',
-            'tipo_documento' => 'DNI',
-            'numero_documento' => '95123456',
-            'celular' => '1136251411',
-            'direccion' => 'Mitre 245',
-            'fecha_nacimiento' => '30-08-1980',
-            'genero' => 'Masculino',
-            'foto_perfil' => 'null',
-            'contacto_nombre' => 'Contact Name',
-            'contacto_telefono' => '987654321',
-            'contacto_relacion' => 'Friend',
-            'estado' => 'Activo',
+            // 'nombres' => 'Javier',
+            // 'apellidos' => 'Borjas',
+            // 'tipo_documento' => 'DNI',
+            // 'numero_documento' => '95123456',
+            // 'celular' => '1136251411',
+            // 'direccion' => 'Mitre 245',
+            // 'fecha_nacimiento' => '30-08-1980',
+            // 'genero' => 'Masculino',
+            // 'foto_perfil' => 'null',
+            // 'contacto_nombre' => 'Contact Name',
+            // 'contacto_telefono' => '987654321',
+            // 'contacto_relacion' => 'Friend',
+            // 'estado' => 'Activo',
         ])->assignRole('SUPER ADMINISTRADOR');
 
         Ajuste::create([

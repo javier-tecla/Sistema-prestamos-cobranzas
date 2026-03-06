@@ -1,0 +1,37 @@
+Table usuarios {
+    id int [pk, increment]
+    name varchar(100)
+    email varchar(100) [unique]
+    password varchar(100)
+
+    
+
+    creado_en timestamp [default: `now()`]
+    actualizado_en timestamp [default: `now()`]
+    eliminado_en timestamp [default: `now()`]
+}
+
+Table clintes {
+    id int [pk, increment]
+    user_id int [ref: > usuarios.id]
+
+    nombres varchar(100)
+    apellidos varchar(100)
+    tipo_documento varchar(50)
+    numero_documento varchar(50) [unique]
+    celular varchar(20)
+    direccion varchar(200)
+    fecha_nacimiento date
+    genero varchar(20)
+    foto_perfil varchar(255)
+    contacto_nombre varchar(100)
+    contacto_telefono varchar(20)
+    contacto_relacion varchar(50)
+    estado varchar(50) [default: `activo`]
+
+    creando_en timestamp [default: `now()`]
+    actualizado_en timestamp [default: `now()`]
+    
+
+
+}
