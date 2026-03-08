@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             $table->string('nombres');
             $table->string('apellidos');
@@ -28,8 +28,7 @@ return new class extends Migration
             $table->string('contacto_nombre');
             $table->string('contacto_telefono');
             $table->string('contacto_relacion');
-            $table->enum('estado', ['Activo', 'Inactivo'])->default('Activo');
-
+            
             $table->timestamps();
         });
     }

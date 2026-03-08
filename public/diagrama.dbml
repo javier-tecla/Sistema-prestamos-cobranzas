@@ -4,7 +4,7 @@ Table usuarios {
     email varchar(100) [unique]
     password varchar(100)
 
-    
+    estado varchar(50) [default: `activo`]
 
     creado_en timestamp [default: `now()`]
     actualizado_en timestamp [default: `now()`]
@@ -27,8 +27,7 @@ Table clintes {
     contacto_nombre varchar(100)
     contacto_telefono varchar(20)
     contacto_relacion varchar(50)
-    estado varchar(50) [default: `activo`]
-
+    
     creando_en timestamp [default: `now()`]
     actualizado_en timestamp [default: `now()`]
     

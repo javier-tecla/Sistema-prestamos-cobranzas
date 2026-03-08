@@ -9,4 +9,25 @@ class Cliente extends Model
 {
     /** @use HasFactory<\Database\Factories\ClienteFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'nombres',
+        'apellidors',
+        'tipo_documento',
+        'numero_docuemnto',
+        'celular',
+        'direccion',
+        'fecha_nacimiento',
+        'genero',
+        'foto_perfil',
+        'contacto_nombre',
+        'contacto_telefono',
+        'contacto_relacion',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

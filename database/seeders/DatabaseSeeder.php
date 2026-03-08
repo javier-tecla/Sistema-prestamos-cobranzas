@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Ajuste;
+use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -54,5 +55,7 @@ class DatabaseSeeder extends Seeder
             'interes' => 10.00,
             'mora' => 2.00,
         ]);
+
+        Cliente::factory(50)->create();
     }
 }
