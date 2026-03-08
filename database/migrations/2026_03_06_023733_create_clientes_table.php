@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
 
-            // $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             $table->string('nombres');
             $table->string('apellidos');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('numero_documento')->unique();
             $table->string('celular');
             $table->string('direccion');
-            $table->string('fecha_nacimiento');
+            $table->date('fecha_nacimiento');
             $table->enum('genero', ['Masculino', 'Femenino']);
             $table->string('foto_perfil')->nullable();
             $table->string('contacto_nombre');

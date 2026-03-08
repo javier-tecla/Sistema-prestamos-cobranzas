@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +17,25 @@ class ClienteFactory extends Factory
      */
     public function definition(): array
     {
+        $nombres = $this->faker->firstName();
+        $apellidos = $this->faker->lastName();
+        $numero_documento = $this->faker->unique()->numerify('#########');
+
+        $usuario = User::create([
+            'name' => $nombres.' '.$apellidos,
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => bcrypt($numero_documento),
+            'estado' => 'Activo',
+        ]);
+
+        $usuario->assignRole('Cliente');
+
         return [
-            'nombres' => $this->faker->firstName(),
-            'apellidos' => $this->faker->lastName(),
-            'tipo_documento' => $this->faker->randomElement(['DNI', 'Passaporte', 'Carnet de Extranjería', 'RUC', 'Carnet de identidad']),
-            'numero_documento' => $this->faker->unique()->numerify('########'),
+            'user_id' => $usuario->id,
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
+            'tipo_documento' => $this->faker->randomElement(['DNI', 'Pasaporte', 'Carnet de Extranjería', 'RUC', 'Carnet de identidad']),
+            'numero_documento' => $numero_documento,
             'celular' => $this->faker->phoneNumber(),
             'direccion' => $this->faker->address(),
             'fecha_nacimiento' => $this->faker->date(),
