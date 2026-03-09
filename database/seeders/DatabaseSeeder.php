@@ -56,6 +56,6 @@ class DatabaseSeeder extends Seeder
             'mora' => 2.00,
         ]);
 
-        Cliente::factory(50)->create();
+        Cliente::factory(100)->create();
     }
 }

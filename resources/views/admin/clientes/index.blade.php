@@ -1,11 +1,11 @@
 <x-layouts::app title="Listado de usuarios">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
-            <flux:heading size="xl" level="1">Listado de Usuarios</flux:heading>
+            <flux:heading size="xl" level="1">Listado de Clientes</flux:heading>
             <br>
             <flux:breadcrumbs>
                 <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
-                <flux:breadcrumbs.item>Listado de usuarios</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Listado de clientes</flux:breadcrumbs.item>
             </flux:breadcrumbs>
         </div>
 
@@ -13,7 +13,7 @@
     </div>
 
     <div class="flex justify-end">
-        <a href="{{ url('/admin/usuarios/create') }}"
+        <a href="{{ url('/admin/clientes/create') }}"
             class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded transition">
             <i class="fas fa-plus mr-2"></i>
             Crear nuevo
@@ -27,9 +27,6 @@
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nro</th>
-                    <th
-                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Rol</th>
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nombres y Apellido</th>
@@ -51,126 +48,92 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-zinc-800">
-                @foreach ($usuarios as $usuario)
+                @foreach ($clientes as $cliente)
                     <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700/50 transition">
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $loop->iteration }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{ $usuario->roles->pluck('name')->join(', ') }}
+                            {{ $cliente->apellidos . ' ' . $cliente->nombres }}
                         </td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{ $usuario->name }}</td>
+                            {{ $cliente->user->email }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{ $usuario->email }}</td>
+                            {{ $cliente->tipo_documento . ' ' . $cliente->numero_documento }}</td>
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{ $usuario->tipo_documento . ' ' . $usuario->numero_documento }}</td>
-                        <td
-                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            {{ $usuario->celular }}</td>
+                            {{ $cliente->celular }}</td>
                         <td
                             class="text-center px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                            @if ($usuario->deleted_at)
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                    Inactivo
-                                </span>
-                            @else
+                            @if ($cliente->user->estado == 'Activo')
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Activo
                                 </span>
+                            @else
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Inactivo
+                                </span>
                             @endif
                         </td>
+
                         <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">
-                            @if ($usuario->deleted_at)
-                                <form action="{{ url('/admin/usuario/' . $usuario->id . '/restaurar') }}" method="post"
-                                    id="miFormulario{{ $usuario->id }}">
+
+
+
+                            <div class="flex justify-center gap-2">
+                                <a href="{{ url('/admin/cliente/' . $cliente->id) }}"
+                                    class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
+                                    <i class="fas fa-eye mr-2"></i> Ver
+                                </a>
+                                <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}"
+                                    class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
+                                    <i class="fas fa-pencil-alt mr-2"></i> Editar
+                                </a>
+
+                                <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="post"
+                                    id="miFormulario{{ $cliente->id }}">
                                     @csrf
+                                    @method('DELETE')
                                     <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold rounded transition"
-                                        onclick="preguntar{{ $usuario->id }}(event)">
-                                        <i class="fas fa-undo-alt mr-2"></i>Restaurar
+                                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
+                                        onclick="preguntar{{ $cliente->id }}(event)">
+                                        <i class="fas fa-trash-alt mr-2"></i> Eliminar
                                     </button>
                                 </form>
 
                                 <script>
-                                    function preguntar{{ $usuario->id }}(event) {
+                                    function preguntar{{ $cliente->id }}(event) {
                                         event.preventDefault();
 
                                         Swal.fire({
-                                            title: '¿Desea restaurar este registro?',
+                                            title: '¿Desea eliminar este registro?',
                                             text: '',
                                             icon: 'question',
                                             showDenyButton: true,
-                                            confirmButtonText: 'Restaurar',
-                                            confirmButtonColor: '#F0B100',
+                                            confirmButtonText: 'Eliminar',
+                                            confirmButtonColor: '#a5161d',
                                             denyButtonColor: '#270a0a',
                                             denyButtonText: 'Cancelar',
                                         }).then((result) => {
                                             if (result.isConfirmed) {
                                                 // JavaScript puro para enviar el formulario
-                                                document.getElementById('miFormulario{{ $usuario->id }}').submit();
+                                                document.getElementById('miFormulario{{ $cliente->id }}').submit();
                                             }
                                         });
                                     }
                                 </script>
-                            @else
-                                <div class="flex justify-center gap-2">
-                                    <a href="{{ url('/admin/usuario/' . $usuario->id) }}"
-                                        class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
-                                        <i class="fas fa-eye mr-2"></i> Ver
-                                    </a>
-                                    <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}"
-                                        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
-                                        <i class="fas fa-pencil-alt mr-2"></i> Editar
-                                    </a>
-
-                                    <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="post"
-                                        id="miFormulario{{ $usuario->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
-                                            onclick="preguntar{{ $usuario->id }}(event)">
-                                            <i class="fas fa-trash-alt mr-2"></i> Eliminar
-                                        </button>
-                                    </form>
-
-                                    <script>
-                                        function preguntar{{ $usuario->id }}(event) {
-                                            event.preventDefault();
-
-                                            Swal.fire({
-                                                title: '¿Desea eliminar este registro?',
-                                                text: '',
-                                                icon: 'question',
-                                                showDenyButton: true,
-                                                confirmButtonText: 'Eliminar',
-                                                confirmButtonColor: '#a5161d',
-                                                denyButtonColor: '#270a0a',
-                                                denyButtonText: 'Cancelar',
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    // JavaScript puro para enviar el formulario
-                                                    document.getElementById('miFormulario{{ $usuario->id }}').submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
-                                </div>
-                            @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-
 
     <style>
         /* Ocultar textos en ingles de la paginación */
@@ -179,22 +142,21 @@
         }
     </style>
 
-    @if ($usuarios->hasPages())
+    @if ($clientes->hasPages())
         <div class="py-3 mt-4 flex justify-between items-center">
             <div class="text-gray-600 dark:text-gray-400 text-sm">
                 Mostrando
-                <span class="font-semibold">{{ $usuarios->firstItem() }}</span>
+                <span class="font-semibold">{{ $clientes->firstItem() }}</span>
                 al
-                <span class="font-semibold">{{ $usuarios->lastItem() }}</span>
+                <span class="font-semibold">{{ $clientes->lastItem() }}</span>
                 de
-                <span class="font-semibold">{{ $usuarios->total() }}</span>
+                <span class="font-semibold">{{ $clientes->total() }}</span>
                 resultados
             </div>
             <div>
-                {{ $usuarios->links() }}
+                {{ $clientes->links() }}
             </div>
         </div>
     @endif
-
 
 </x-layouts::app>

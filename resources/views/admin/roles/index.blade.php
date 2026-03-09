@@ -94,9 +94,30 @@
             </tbody>
         </table>
     </div>
-    {{-- <div class="py-4 flex justify-center">
 
-    </div> --}}
+    <style>
+        /* Ocultar textos en ingles de la paginación */
+        nav[role="navigation"] p {
+            display: none !important;
+        }
+    </style>
+
+    @if ($roles->hasPages())
+        <div class="py-3 mt-4 flex justify-between items-center">
+            <div class="text-gray-600 dark:text-gray-400 text-sm">
+                Mostrando
+                <span class="font-semibold">{{ $roles->firstItem() }}</span>
+                al
+                <span class="font-semibold">{{ $roles->lastItem() }}</span>
+                de
+                <span class="font-semibold">{{ $roles->total() }}</span>
+                resultados
+            </div>
+            <div>
+                {{ $roles->links() }}
+            </div>
+        </div>
+    @endif
 
 
 
