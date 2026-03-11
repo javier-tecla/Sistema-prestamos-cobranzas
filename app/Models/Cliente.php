@@ -15,7 +15,7 @@ class Cliente extends Model
         'nombres',
         'apellidors',
         'tipo_documento',
-        'numero_docuemnto',
+        'numero_documento',
         'celular',
         'direccion',
         'fecha_nacimiento',

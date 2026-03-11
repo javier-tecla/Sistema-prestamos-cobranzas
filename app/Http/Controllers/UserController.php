@@ -11,9 +11,20 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = User::withTrashed()->paginate(10);
+         $buscar = $request->input('buscar');
+
+         $usuario = User::withTrashed();
+
+        if ($buscar) {
+            $usuario->where(function ($query) use ($buscar) {
+            $query->where('name', 'like', '%' . $buscar . '%')
+                ->orWhere('email', 'like', '%' . $buscar . '%');
+            });
+        }
+
+        $usuarios = $usuario->paginate(10);
         return view('admin.usuarios.index', compact('usuarios'));
     }
 

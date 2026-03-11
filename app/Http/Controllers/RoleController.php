@@ -10,11 +10,19 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::where('name','!=','SUPER ADMINISTRADOR')->paginate(10);
+        $buscar = $request->input('buscar');
+
+        $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR');
+
+        if ($buscar) {
+            $roles->where('name', 'like', '%'.$buscar.'%');
+        }
+
+        $roles = $roles->paginate(10);
         // return response()->json($roles);
-        
+
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -36,7 +44,7 @@ class RoleController extends Controller
             'name' => 'required|string|max:255|unique:roles,name,',
         ]);
 
-        $rol = new Role();
+        $rol = new Role;
         $rol->name = strtoupper($request->name);
         $rol->save();
 
@@ -52,6 +60,7 @@ class RoleController extends Controller
     public function show(string $id)
     {
         $rol = Role::find($id);
+
         // return response()->json($rol);
         return view('admin.roles.show', compact('rol'));
     }
@@ -62,6 +71,7 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         $rol = Role::find($id);
+
         return view('admin.roles.edit', compact('rol'));
     }
 
@@ -72,7 +82,7 @@ class RoleController extends Controller
     {
         // return response()->json($request->all());
         $request->validate([
-            'name' => 'required|string|max:255|unique:roles,name,' . $id,
+            'name' => 'required|string|max:255|unique:roles,name,'.$id,
         ]);
 
         $rol = Role::find($id);
