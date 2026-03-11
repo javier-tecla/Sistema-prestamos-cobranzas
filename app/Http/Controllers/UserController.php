@@ -33,7 +33,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR')->get();
+        $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR')
+        ->where('name', '!=', 'CLIENTE' )
+        ->get();
         return view('admin.usuarios.create', compact('roles'));
     }
 
