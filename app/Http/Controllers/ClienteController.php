@@ -87,6 +87,10 @@ class ClienteController extends Controller
         $cliente->contacto_nombre = $request->contacto_nombre;
         $cliente->contacto_telefono = $request->contacto_telefono;
         $cliente->contacto_relacion = $request->contacto_relacion;
+        if ($request->hasFile('foto_perfil')) {
+            $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
+            $cliente->foto_perfil = $path;
+        }
         $cliente->save();
 
         return redirect()->route('admin.clientes.index')
@@ -99,9 +103,11 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        //
+        $cliente = Cliente::findOrFail($id);
+        return view('admin.clientes.show', compact('cliente'));
+        
     }
 
     /**

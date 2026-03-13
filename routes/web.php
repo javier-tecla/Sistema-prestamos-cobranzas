@@ -62,7 +62,6 @@ Route::delete('/admin/usuario/{id}', [App\Http\Controllers\UserController::class
 Route::get('/admin/clientes', [App\Http\Controllers\ClienteController::class, 'index'])->name('admin.clientes.index')->middleware('auth');
 Route::get('/admin/clientes/create', [App\Http\Controllers\ClienteController::class, 'create'])->name('admin.clientes.create')->middleware('auth');
 Route::post('/admin/clientes/create',[App\Http\Controllers\ClienteController::class, 'store'])->name('admin.clientes.store')->middleware('auth');
-Route::post('/admin/cliente/{id}/restaurar',[App\Http\Controllers\ClienteController::class, 'restaurar'])->name('admin.clientes.restaurar')->middleware('auth');
 Route::get('/admin/cliente/{id}', [App\Http\Controllers\ClienteController::class, 'show'])->name('admin.clientes.show')->middleware('auth');
 Route::get('/admin/cliente/{id}/edit', [App\Http\Controllers\ClienteController::class, 'edit'])->name('admin.clientes.edit')->middleware('auth');
 Route::put('/admin/cliente/{id}', [App\Http\Controllers\ClienteController::class, 'update'])->name('admin.clientes.update')->middleware('auth');
