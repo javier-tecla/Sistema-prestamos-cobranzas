@@ -315,7 +315,7 @@
 
             <div class="flex flex-wrap gap-3 justify-between">
 
-                <a href="{{ url('/admin/usuarios') }}"
+                <a href="{{ url('/admin/clientes') }}"
                     class="px-5 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all inline-flex items-center">
 
                     <i class="fas fa-arrow-left mr-2"></i> Volver al listado

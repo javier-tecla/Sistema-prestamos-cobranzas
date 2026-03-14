@@ -113,9 +113,11 @@ class ClienteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cliente $cliente)
+    public function edit($id)
     {
-        //
+        // echo "Editar cliente ID: " . $id;
+        $cliente = Cliente::findOrFail($id);
+        return view('admin.clientes.edit', compact('cliente'));
     }
 
     /**

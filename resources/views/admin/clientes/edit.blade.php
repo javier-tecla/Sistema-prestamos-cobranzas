@@ -2,12 +2,13 @@
 
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
-            <flux:heading size="xl" level="1">Creación de un Nuevo Cliente</flux:heading>
+            <flux:heading size="xl" level="1">Datos del Cliente</flux:heading>
             <br>
             <flux:breadcrumbs>
                 <flux:breadcrumbs.item href="{{ url('/admin') }}">Inicio</flux:breadcrumbs.item>
                 <flux:breadcrumbs.item href="{{ url('admin/clientes') }}">Listado de clientes</flux:breadcrumbs.item>
-                <flux:breadcrumbs.item>Creación de cliente</flux:breadcrumbs.item>
+                <flux:breadcrumbs.item>Modificar datos del cliente: {{ $cliente->apellidos }} {{ $cliente->nombres }}
+                </flux:breadcrumbs.item>
             </flux:breadcrumbs>
         </div>
         <flux:separator variant="subtle" />
@@ -18,32 +19,33 @@
 
     <div
         class="bg-white dark:bg-neutral-800 border-t border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
-        <form action="{{ url('/admin/clientes/create') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="p-6">
                 <div class="mb-8">
                     <flux:heading level="2" size="lg" class="mb-4 text-blue-600">Datos de Cuenta
                     </flux:heading>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                         <div class="mb-4">
                             <flux:label>Email <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="email" type="email" icon="envelope" placeholder="correo@ejemplo.com"
-                                required value="{{ old('email') }}" />
+                                required value="{{ old('email', $cliente->user->email) }}" />
                             <flux:error name="email" />
                         </div>
-
+                        {{-- En edición, eliminamos el atributo 'required' de las contraseñas --}}
                         <div class="mb-4">
-                            <flux:label>Contraseña <sup class="text-red-500">(*)</sup></flux:label>
-                            <flux:input name="password" type="password" icon="key" placeholder="••••••••"
-                                required />
+                            <flux:label class="flex items-center gap-2 whitespace-nowrap">Contraseña <span
+                                    class="text-xs text-slate-400 font-normal">(Dejar en blanco para no cambiar)</span>
+                            </flux:label>
+                            <flux:input name="password" type="password" icon="key" placeholder="••••••••" />
                             <flux:error name="password" />
                         </div>
 
                         <div class="mb-4">
-                            <flux:label>Confirmar Contraseña <sup class="text-red-500">(*)</sup></flux:label>
+                            <flux:label>Confirmar Contraseña </flux:label>
                             <flux:input name="password_confirmation" type="password" icon="key"
-                                placeholder="••••••••" required />
+                                placeholder="••••••••" />
                             <flux:error name="password_confirmation" />
                         </div>
                     </div>
@@ -56,14 +58,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="mb-4">
                             <flux:label>Nombres <sup class="text-red-500">(*)</sup></flux:label>
-                            <flux:input name="nombres" placeholder="Nombres" required value="{{ old('nombres') }}" />
+                            <flux:input name="nombres" placeholder="Nombres" required
+                                value="{{ old('nombres', $cliente->nombres) }}" />
                             <flux:error name="nombres" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Apellidos <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="apellidos" placeholder="Apellidos" required
-                                value="{{ old('apellidos') }}" />
+                                value="{{ old('apellidos', $cliente->apellidos) }}" />
                             <flux:error name="apellidos" />
                         </div>
 
@@ -71,48 +74,65 @@
                             <flux:label>Tipo Documento <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:select name="tipo_documento" required>
                                 <option value="" disabled selected>Seleccione...</option>
-                                <option value="DNI">DNI</option>
-                                <option value="Pasaporte">Pasaporte</option>
-                                <option value="Carnet de Extranjería">Carnet de Extranjería</option>
-                                <option value="RUC">RUC</option>
-                                <option value="Carnet de identidad">Carnet de identidad</option>
+                                <option value="DNI"
+                                    {{ old('tipo_documento', $cliente->tipo_documento) == 'DNI' ? 'selected' : '' }}>DNI
+                                </option>
+                                <option value="Pasaporte"
+                                    {{ old('tipo_documento', $cliente->tipo_documento) == 'Pasaporte' ? 'selected' : '' }}>
+                                    Pasaporte</option>
+                                <option value="Carnet de Extranjería"
+                                    {{ old('tipo_documento', $cliente->tipo_documento) == 'Carnet de Extranjería' ? 'selected' : '' }}>
+                                    Carnet de Extranjería</option>
+                                <option value="RUC"
+                                    {{ old('tipo_documento', $cliente->tipo_documento) == 'RUC' ? 'selected' : '' }}>
+                                    RUC</option>
+                                <option value="Carnet de identidad"
+                                    {{ old('tipo_documento', $cliente->tipo_documento) == 'Carnet de identidad' ? 'selected' : '' }}>
+                                    Carnet de identidad</option>
                             </flux:select>
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Nro Documento <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="numero_documento" icon="identification" placeholder="12345678" required
-                                value="{{ old('numero_documento') }}" />
+                                value="{{ old('numero_documento', $cliente->numero_documento) }}" />
                             <flux:error name="numero_documento" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Celular <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="celular" icon="phone" placeholder="999 999 999" required
-                                value="{{ old('celular') }}" />
+                                value="{{ old('celular', $cliente->celular) }}" />
                             <flux:error name="celular" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Fecha Nacimiento <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="fecha_nacimiento" type="date" required
-                                value="{{ old('fecha_nacimiento') }}" />
+                                value="{{ old('fecha_nacimiento', $cliente->fecha_nacimiento) }}" />
                             <flux:error name="fecha_nacimiento" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Género <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:select name="genero" required>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
+                                <option value="Masculino"
+                                    {{ old('genero', $cliente->genero) == 'Masculino' ? 'selected' : '' }}>Masculino
+                                </option>
+                                <option value="Femenino"
+                                    {{ old('genero', $cliente->genero) == 'Femenino' ? 'selected' : '' }}>Femenino
+                                </option>
                             </flux:select>
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Estado <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:select name="estado">
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
+                                <option value="Activo"
+                                    {{ old('estado', $cliente->estado) == 'Activo' ? 'selected' : '' }}>Activo</option>
+                                <option value="Inactivo"
+                                    {{ old('estado', $cliente->estado) == 'Inactivo' ? 'selected' : '' }}>Inactivo
+                                </option>
                             </flux:select>
                         </div>
                     </div>
@@ -120,7 +140,7 @@
                     <div class="mb-4">
                         <flux:label>Dirección de Domicilio <sup class="text-red-500">(*)</sup></flux:label>
                         <flux:input name="direccion" icon="map-pin" placeholder="Av. Siempre viva 123..." required
-                            value="{{ old('direccion') }}" />
+                            value="{{ old('direccion', $cliente->direccion) }}" />
                     </div>
                 </div>
 
@@ -134,13 +154,13 @@
                         <div class="space-y-4">
                             <flux:label>Nombre Completo<sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="contacto_nombre" placeholder="Ej: María Pérez" required
-                                value="{{ old('contacto_nombre') }}" />
+                                value="{{ old('contacto_nombre', $cliente->contacto_nombre) }}" />
                             <flux:label>Teléfono de contacto <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="contacto_telefono" placeholder="987 654 321" required
-                                value="{{ old('contacto_telefono') }}" />
+                                value="{{ old('contacto_telefono', $cliente->contacto_telefono) }}" />
                             <flux:label>Relación / Parentesco <sup class="text-red-500">(*)</sup></flux:label>
                             <flux:input name="contacto_relacion" placeholder="Ej: Madre, Cónyuge" required
-                                value="{{ old('contacto_relacion') }}" />
+                                value="{{ old('contacto_relacion', $cliente->contacto_relacion) }}" />
                         </div>
                     </div>
 
@@ -152,10 +172,12 @@
                             <div class="relative group">
                                 <div
                                     class="h-24 w-24 rounded-full border-2 border-dashed border-slate-300 overflow-hidden bg-slate-50 flex items-center justify-center">
-                                    <img id="image-preview" src="#" alt="Preview"
-                                        class="hidden h-full w-full object-cover">
+                                    <img id="image-preview"
+                                        src="{{ $cliente->foto_perfil ? asset('storage/' . $cliente->foto_perfil) : '#' }}"
+                                        alt="Preview"
+                                        class="{{ $cliente->foto_perfil ? '' : 'hidden' }} h-full w-full object-cover">
                                     <flux:icon id="placeholder-icon" name="user"
-                                        class="text-slate-300 h-10 w-10" />
+                                        class="{{ $cliente->foto_perfil ? 'hidden' : '' }} text-slate-300 h-10 w-10" />
                                 </div>
                             </div>
                             <div class="flex-1">
