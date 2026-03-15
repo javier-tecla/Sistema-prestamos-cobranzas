@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Models\Cliente;
 use App\Models\User;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -13,18 +17,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-         $buscar = $request->input('buscar');
+        $buscar = $request->input('buscar');
 
-         $usuario = User::withTrashed();
+        $usuario = User::withTrashed();
 
         if ($buscar) {
             $usuario->where(function ($query) use ($buscar) {
-            $query->where('name', 'like', '%' . $buscar . '%')
-                ->orWhere('email', 'like', '%' . $buscar . '%');
+                $query->where('name', 'like', '%'.$buscar.'%')
+                    ->orWhere('email', 'like', '%'.$buscar.'%');
             });
         }
 
         $usuarios = $usuario->paginate(10);
+
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
@@ -34,8 +39,9 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR')
-        ->where('name', '!=', 'CLIENTE' )
-        ->get();
+            ->where('name', '!=', 'CLIENTE')
+            ->get();
+
         return view('admin.usuarios.create', compact('roles'));
     }
 
@@ -52,7 +58,7 @@ class UserController extends Controller
             'nombres' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'tipo_documento' => 'required|in:DNI,Pasaporte,Carnet de Extranjería,RUC,Carnet de identidad',
-            'numero_documento' => 'required|string|unique:users,numero_documento',
+            'numero_documento' => 'required|string|unique:clientes,numero_documento',
             'celular' => 'required|string|max:20',
             'direccion' => 'required|string|max:255',
             'fecha_nacimiento' => 'required|date',
@@ -65,8 +71,8 @@ class UserController extends Controller
         ]);
 
         $usuario = new User;
-        $usuario->name = $request->nombres . ' ' . $request->apellidos;
-        
+        $usuario->name = $request->nombres.' '.$request->apellidos;
+
         $usuario->email = $request->email;
         $usuario->password = bcrypt($request->password);
         $usuario->nombres = $request->nombres;
@@ -83,6 +89,10 @@ class UserController extends Controller
         $usuario->contacto_telefono = $request->contacto_telefono;
         $usuario->contacto_relacion = $request->contacto_relacion;
         if ($request->hasFile('foto_perfil')) {
+            // si existe foto previa, eliminarla
+            if ($usuario->foto_perfil && Storage::disk('public')->exists($usuario->foto_perfil)) {
+                Storage::disk('public')->delete($usuario->foto_perfil);
+            }
             $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
             $usuario->foto_perfil = $path;
         }
@@ -103,6 +113,11 @@ class UserController extends Controller
         $usuario->estado = 'Activo';
         $usuario->save();
 
+        $cliente = Cliente::withTrashed()->where('user_id', $usuario->id)->first();
+        if ($cliente && $cliente->trashed()) {
+            $cliente->restore();
+        }
+
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario restaurado correctamente')
             ->with('icono', 'success');
@@ -115,6 +130,7 @@ class UserController extends Controller
     {
         // echo "Mostrar usuario con ID: " . $id;
         $usuario = User::findOrFail($id);
+
         return view('admin.usuarios.show', compact('usuario'));
     }
 
@@ -126,6 +142,7 @@ class UserController extends Controller
         // echo "editando el usuario con ID: " . $id;
         $usuario = User::findOrFail($id);
         $roles = Role::where('name', '!=', 'SUPER ADMINISTRADOR')->get();
+
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
@@ -135,14 +152,19 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         // return response()->json($request->all());
+
+        $usuario = User::findOrFail($id);
+
+        $clienteId = \DB::table('clientes')->where('user_id', $id)->value('id');
+
         $request->validate([
             'rol' => 'required|string|exists:roles,name',
-            'email' => 'required|email|unique:users,email,' . $id,
+            'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'nullable|string|confirmed|min:8',
             'nombres' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'tipo_documento' => 'required|in:DNI,Pasaporte,Carnet de Extranjería,RUC,Carnet de identidad',
-            'numero_documento' => 'required|string|unique:users,numero_documento,' . $id,
+            'numero_documento' => 'required|string|unique:clientes,numero_documento,' .$clienteId,
             'celular' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
             'fecha_nacimiento' => 'required|date',
@@ -154,7 +176,7 @@ class UserController extends Controller
             'foto_perfil' => 'nullable|image|max:2048',
         ]);
         $usuario = User::findOrFail($id);
-        $usuario->name = $request->nombres . ' ' . $request->apellidos;
+        $usuario->name = $request->nombres.' '.$request->apellidos;
         $usuario->email = $request->email;
         if ($request->filled('password')) {
             $usuario->password = bcrypt($request->password);
@@ -194,6 +216,11 @@ class UserController extends Controller
         $usuario->save();
 
         $usuario->delete();
+
+        $cliente = Cliente::where('user_id', $usuario->id)->first();
+        if ($cliente) {
+            $cliente->delete();
+        }
 
         return redirect()->route('admin.usuarios.index')
             ->with('mensaje', 'Usuario eliminado correctamente')

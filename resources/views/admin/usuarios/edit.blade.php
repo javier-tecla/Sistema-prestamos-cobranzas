@@ -68,14 +68,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="mb-4">
                             <flux:label>Nombres <span class="text-red-500">(*)</span></flux:label>
-                            <flux:input name="nombres" placeholder="Nombres" required value="{{ old('nombres', $usuario->cliente->nombres) }}" />
+                            <flux:input name="nombres" placeholder="Nombres" required value="{{ old('nombres', $usuario->cliente->nombres ?? '') }}" />
                             <flux:error name="nombres" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Apellidos <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="apellidos" placeholder="Apellidos" required
-                                value="{{ old('apellidos', $usuario->cliente->apellidos) }}" />
+                                value="{{ old('apellidos', $usuario->cliente->apellidos ?? '') }}" />
                             <flux:error name="apellidos" />
                         </div>
 
@@ -93,21 +93,21 @@
                         <div class="mb-4">
                             <flux:label>Nro Documento <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="numero_documento" icon="identification" placeholder="12345678" required
-                                value="{{ old('numero_documento', $usuario->cliente->numero_documento) }}" />
+                                value="{{ old('numero_documento', $usuario->cliente->numero_documento ?? '') }}" />
                             <flux:error name="numero_documento" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Celular <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="celular" icon="phone" placeholder="999 999 999" required
-                                value="{{ old('celular', $usuario->cliente->celular) }}" />
+                                value="{{ old('celular', $usuario->cliente->celular ?? '') }}" />
                             <flux:error name="celular" />
                         </div>
 
                         <div class="mb-4">
                             <flux:label>Fecha Nacimiento <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="fecha_nacimiento" type="date" required
-                                value="{{ old('fecha_nacimiento', $usuario->cliente->fecha_nacimiento) }}" />
+                                value="{{ old('fecha_nacimiento', $usuario->cliente->fecha_nacimiento ?? '') }}" />
                             <flux:error name="fecha_nacimiento" />
                         </div>
 
@@ -131,7 +131,7 @@
                     <div class="mb-4">
                         <flux:label>Dirección de Domicilio <span class="text-red-500">(*)</span></flux:label>
                         <flux:input name="direccion" icon="map-pin" required
-                            value="{{ old('direccion', $usuario->cliente->direccion) }}" />
+                            value="{{ old('direccion', $usuario->cliente->direccion ?? '') }}" />
                     </div>
                 </div>
 
@@ -147,13 +147,13 @@
                         <div class="space-y-4">
                             <flux:label>Nombre Completo<span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_nombre" placeholder="Ej: María Pérez" required
-                                value="{{ old('contacto_nombre', $usuario->cliente->contacto_nombre) }}" />
+                                value="{{ old('contacto_nombre', $usuario->cliente->contacto_nombre ?? '') }}" />
                             <flux:label>Teléfono de contacto <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_telefono" placeholder="987 654 321" required
-                                value="{{ old('contacto_telefono', $usuario->cliente->contacto_telefono) }}" />
+                                value="{{ old('contacto_telefono', $usuario->cliente->contacto_telefono ?? '') }}" />
                             <flux:label>Relación / Parentesco <span class="text-red-500">(*)</span></flux:label>
                             <flux:input name="contacto_relacion" placeholder="Ej: Madre, Cónyuge" required
-                                value="{{ old('contacto_relacion', $usuario->cliente->contacto_relacion) }}" />
+                                value="{{ old('contacto_relacion', $usuario->cliente->contacto_relacion ?? '') }}" />
                         </div>
                     </div>
 

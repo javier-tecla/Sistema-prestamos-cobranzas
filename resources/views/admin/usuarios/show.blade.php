@@ -31,7 +31,7 @@
                 </div>
                 <div class="text-center md:text-left">
 
-                    <flux:heading level="2" size="xl">{{ $usuario->cliente->nombres }} {{ $usuario->cliente->apellidos }}
+                    <flux:heading level="2" size="xl">{{ $usuario->cliente->nombres ?? '' }} {{ $usuario->cliente->apellidos ?? '' }}
 
                     </flux:heading>
 
@@ -114,7 +114,7 @@
 
                                 <label class="text-xs text-slate-400 uppercase font-bold">Tipo Doc.</label>
 
-                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->tipo_documento }}
+                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->tipo_documento ?? '' }}
 
                                 </p>
 
@@ -126,7 +126,7 @@
 
                                 <p class="text-sm text-slate-700 dark:text-neutral-200">
 
-                                    {{ $usuario->cliente->numero_documento }}
+                                    {{ $usuario->cliente->numero_documento ?? '' }}
 
                                 </p>
 
@@ -136,7 +136,7 @@
 
                                 <label class="text-xs text-slate-400 uppercase font-bold">Género</label>
 
-                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->genero }}</p>
+                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->genero ?? '' }}</p>
 
                             </div>
 
@@ -146,7 +146,7 @@
 
                                 <p class="text-sm text-slate-700 dark:text-neutral-200">
 
-                                    {{ $usuario->cliente->fecha_nacimiento }}
+                                    {{ $usuario->cliente->fecha_nacimiento ?? '' }}
 
                                 </p>
 
@@ -175,7 +175,7 @@
 
                                 <label class="text-xs text-slate-400 uppercase font-bold">Dirección</label>
 
-                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->direccion }}</p>
+                                <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->direccion ?? '' }}</p>
 
                             </div>
 
@@ -185,7 +185,7 @@
 
                                     <label class="text-xs text-slate-400 uppercase font-bold">Celular</label>
 
-                                    <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->celular }}</p>
+                                    <p class="text-sm text-slate-700 dark:text-neutral-200">{{ $usuario->cliente->celular ?? '' }}</p>
 
                                 </div>
 
@@ -230,7 +230,7 @@
 
                                 <p class="text-sm text-slate-700 dark:text-neutral-200 font-medium">
 
-                                    {{ $usuario->cliente->contacto_nombre }}</p>
+                                    {{ $usuario->cliente->contacto_nombre ?? '' }}</p>
 
                             </div>
 
@@ -242,7 +242,7 @@
 
                                     <p class="text-sm text-slate-700 dark:text-neutral-200">
 
-                                        {{ $usuario->cliente->contacto_relacion }}</p>
+                                        {{ $usuario->cliente->contacto_relacion ?? '' }}</p>
 
                                 </div>
 
@@ -252,7 +252,7 @@
 
                                     <p class="text-sm text-slate-700 dark:text-neutral-200">
 
-                                        {{ $usuario->cliente->contacto_telefono }}</p>
+                                        {{ $usuario->cliente->contacto_telefono ?? '' }}</p>
 
                                 </div>
 

@@ -21,6 +21,7 @@
         class="bg-white dark:bg-neutral-800 border-t border-gray-200 dark:border-gray-700 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
         <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="p-6">
                 <div class="mb-8">
                     <flux:heading level="2" size="lg" class="mb-4 text-blue-600">Datos de Cuenta
@@ -205,7 +206,7 @@
                         <i class="fas fa-arrow-left mr-2"></i> Volver
                     </a>
                     <flux:button variant="primary" type="submit" color="blue" class="px-5 cursor-pointer">
-                        <i class="fas fa-save mr-2"></i> Registrar Cliente
+                        <i class="fas fa-save mr-2"></i> Actualizar Cliente
                     </flux:button>
                 </div>
             </div>

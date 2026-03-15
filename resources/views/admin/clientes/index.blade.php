@@ -119,50 +119,83 @@
 
                         <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">
 
-
-
                             <div class="flex justify-center gap-2">
-                                <a href="{{ url('/admin/cliente/' . $cliente->id) }}"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-eye mr-2"></i> Ver
-                                </a>
-                                <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}"
-                                    class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-pencil-alt mr-2"></i> Editar
-                                </a>
 
-                                <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="post"
-                                    id="miFormulario{{ $cliente->id }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
-                                        onclick="preguntar{{ $cliente->id }}(event)">
-                                        <i class="fas fa-trash-alt mr-2"></i> Eliminar
-                                    </button>
-                                </form>
+                                @if ($cliente->deleted_at)
+                                    <form action="{{ url('/admin/cliente/' . $cliente->id . '/restaurar') }}"
+                                        method="post" id="miFormulario{{ $cliente->id }}">
+                                        @csrf
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold rounded transition"
+                                            onclick="preguntar{{ $cliente->id }}(event)">
+                                            <i class="fas fa-undo-alt mr-2"></i>Restaurar
+                                        </button>
+                                    </form>
 
-                                <script>
-                                    function preguntar{{ $cliente->id }}(event) {
-                                        event.preventDefault();
+                                    <script>
+                                        function preguntar{{ $cliente->id }}(event) {
+                                            event.preventDefault();
 
-                                        Swal.fire({
-                                            title: '¿Desea eliminar este registro?',
-                                            text: '',
-                                            icon: 'question',
-                                            showDenyButton: true,
-                                            confirmButtonText: 'Eliminar',
-                                            confirmButtonColor: '#a5161d',
-                                            denyButtonColor: '#270a0a',
-                                            denyButtonText: 'Cancelar',
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                // JavaScript puro para enviar el formulario
-                                                document.getElementById('miFormulario{{ $cliente->id }}').submit();
-                                            }
-                                        });
-                                    }
-                                </script>
+                                            Swal.fire({
+                                                title: '¿Desea restaurar este registro?',
+                                                text: '',
+                                                icon: 'question',
+                                                showDenyButton: true,
+                                                confirmButtonText: 'Restaurar',
+                                                confirmButtonColor: '#F0B100',
+                                                denyButtonColor: '#270a0a',
+                                                denyButtonText: 'Cancelar',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // JavaScript puro para enviar el formulario
+                                                    document.getElementById('miFormulario{{ $cliente->id }}').submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                @else
+                                    <a href="{{ url('/admin/cliente/' . $cliente->id) }}"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
+                                        <i class="fas fa-eye mr-2"></i> Ver
+                                    </a>
+                                    <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}"
+                                        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
+                                        <i class="fas fa-pencil-alt mr-2"></i> Editar
+                                    </a>
+
+                                    <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="post"
+                                        id="miFormulario{{ $cliente->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
+                                            onclick="preguntar{{ $cliente->id }}(event)">
+                                            <i class="fas fa-trash-alt mr-2"></i> Eliminar
+                                        </button>
+                                    </form>
+
+                                    <script>
+                                        function preguntar{{ $cliente->id }}(event) {
+                                            event.preventDefault();
+
+                                            Swal.fire({
+                                                title: '¿Desea eliminar este registro?',
+                                                text: '',
+                                                icon: 'question',
+                                                showDenyButton: true,
+                                                confirmButtonText: 'Eliminar',
+                                                confirmButtonColor: '#a5161d',
+                                                denyButtonColor: '#270a0a',
+                                                denyButtonText: 'Cancelar',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // JavaScript puro para enviar el formulario
+                                                    document.getElementById('miFormulario{{ $cliente->id }}').submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                @endif
                             </div>
                         </td>
                     </tr>
