@@ -33,11 +33,39 @@
             </form>
         </div>
         <div class="flex justify-end">
-            <a href="{{ url('/admin/categorias/create') }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded transition">
-                <i class="fas fa-plus mr-2"></i>
-                Crear nuevo
-            </a>
+            <flux:modal.trigger name="create-categoria">
+                <flux:button icon="plus" class="bg-blue-500! hover:bg-blue-600! text-white!">Crear nueva categoría
+                </flux:button>
+            </flux:modal.trigger>
+
+            <flux:modal name="create-categoria" class="md:w-96">
+                <form action="{{ url('/admin/categorias/create') }}" method="POST">
+                    @csrf
+                    <div class="space-y-6">
+                        <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                    <i class="fas fa-tag text-blue-600 dark:text-blue-400 text-lg"></i>
+                                </div>
+                                <div>
+                                    <flux:heading size="lg">Nueva Categoría</flux:heading>
+                                    <flux:text class="mt-1 text-sm text-gray-500 dark:text-gray-400">Agregar una nueva
+                                        categoría de prestamo</flux:text>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label for="name">Nombre</label>
+                        <flux:input id="name" placeholder="Ej: Prestamo personales" name="nombre" icon="tag" required />
+
+                        <div class="flex">
+                            <flux:spacer />
+
+                            <flux:button type="submit" class="bg-blue-500! hover:bg-blue-600! text-white!"><i class="fas fa-save mr-2"></i> Crear categoría</flux:button>
+                        </div>
+                    </div>
+                </form>
+            </flux:modal>
         </div>
     </div>
 

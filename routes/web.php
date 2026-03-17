@@ -70,3 +70,4 @@ Route::delete('/admin/cliente/{id}', [App\Http\Controllers\ClienteController::cl
 
 //rutas para categorias
 Route::get('/admin/categorias', [App\Http\Controllers\CategoriaController::class, 'index'])->name('admin.categorias.index')->middleware('auth');
+Route::post('/admin/categorias/create', [App\Http\Controllers\CategoriaController::class, 'store'])->name('admin.categorias.store')->middleware('auth');

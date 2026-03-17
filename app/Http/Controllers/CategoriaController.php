@@ -31,7 +31,18 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return response()->json($request->all());
+        $request->validate([
+            'nombre' => 'required|string|max:255|unique:categorias,nombre',
+        ]);
+
+        $categoria = new Categoria();
+        $categoria->nombre = ucfirst(mb_strtolower($request->nombre, 'UTF-8'));
+        $categoria->save();
+
+        return redirect()->route('admin.categorias.index')
+            ->with('mensaje', 'Categoría creada exitosamente')
+            ->with('icono', 'success');
     }
 
     /**
