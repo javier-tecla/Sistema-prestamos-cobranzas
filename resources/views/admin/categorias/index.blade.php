@@ -33,7 +33,8 @@
             </form>
         </div>
         <div class="flex justify-end">
-            <flux:modal.trigger name="create-categoria">
+
+            <flux:modal.trigger name="create-categoria" data-open-modal>
                 <flux:button icon="plus" class="bg-blue-500! hover:bg-blue-600! text-white!">Crear nueva categoría
                 </flux:button>
             </flux:modal.trigger>
@@ -56,18 +57,32 @@
                         </div>
 
                         <label for="name">Nombre</label>
-                        <flux:input id="name" placeholder="Ej: Prestamo personales" name="nombre" icon="tag" required />
+                        <flux:input id="name" placeholder="Ej: Prestamos personales" name="nombre" icon="tag"
+                            value="{{ old('nombre') }}" required />
+                        <flux:error name="nombre" />
 
                         <div class="flex">
                             <flux:spacer />
 
-                            <flux:button type="submit" class="bg-blue-500! hover:bg-blue-600! text-white!"><i class="fas fa-save mr-2"></i> Crear categoría</flux:button>
+                            <flux:button type="submit" class="bg-blue-500! hover:bg-blue-600! text-white!"><i
+                                    class="fas fa-save mr-2"></i> Crear categoría</flux:button>
                         </div>
                     </div>
                 </form>
             </flux:modal>
         </div>
     </div>
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const button = document.querySelector('[data-open-modal] button');
+                if (button) {
+                    setTimeout(() => button.click(), 100);
+                }
+            });
+        </script>
+    @endif
 
     @if (request('buscar'))
         <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg">
@@ -109,12 +124,38 @@
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                             {{ $categoria->nombre }}</td>
 
-                        <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">
+                        <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap">
                             <div class="flex justify-center gap-2">
-                                <a href="{{ url('/admin/categoria/' . $categoria->id) }}"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-eye mr-2"></i> Ver
-                                </a>
+                                <flux:modal.trigger name="show-categoria{{ $categoria->id }}" data-open-modal>
+                                    <flux:button icon="eye" size="sm" class="bg-gray-500! hover:bg-gray-600! text-white! text-xs! font-semibold! px-4! py-2! rounded! transition border-none">
+                                        Ver
+                                    </flux:button>
+                                </flux:modal.trigger>
+
+                                <flux:modal name="show-categoria{{ $categoria->id }}" class="md:w-96">
+                                    
+                                        <div class="space-y-6">
+                                            <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+                                                <div class="flex items-center gap-3 mb-2">
+                                                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                                        <i
+                                                            class="fas fa-tag text-blue-600 dark:text-blue-400 text-lg"></i>
+                                                    </div>
+                                                    <div>
+                                                        <flux:heading size="lg">Categoría registrada</flux:heading>
+                                                        <flux:text
+                                                            class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                                            Datos de la categoría de préstamo
+                                                           </flux:text>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <label for="name">Nombre</label>
+                                            <p><i class="fas fa-tag"></i> {{ $categoria->nombre }}</p>
+                                        </div>
+                                </flux:modal>
+
                                 <a href="{{ url('/admin/categoria/' . $categoria->id . '/edit') }}"
                                     class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
                                     <i class="fas fa-pencil-alt mr-2"></i> Editar

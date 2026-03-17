@@ -10,12 +10,21 @@ class CategoriaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+         $buscar = $request->input('buscar');
 
-        $categorias = Categoria::paginate(10);
+          $query = Categoria::query();
+
+        if ($buscar) {
+            $query->where('nombre', 'like', '%'.$buscar.'%');
+        }
+
+        $categorias = $query->paginate(10);
 
         return view('admin.categorias.index', compact('categorias'));
+
+
     }
 
     /**
@@ -48,9 +57,12 @@ class CategoriaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Categoria $categoria)
+    public function show($id)
     {
-        //
+        // echo "Ver cliente ID: " . $id;
+
+        $categoria = Categoria::find($id);
+        return view('admin.categorias.show', compact('categoria'));
     }
 
     /**
