@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoriaController extends Controller
 {
@@ -76,9 +77,27 @@ class CategoriaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Categoria $categoria)
+    public function update(Request $request, $id)
     {
-        //
+        // return response()->json($request->all());
+        $validate = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255|unique:categorias,nombre,' . $id,
+        ]);
+
+        if ($validate->fails()) {
+            return redirect()->back()
+                ->withErrors($validate)
+                ->withInput()
+                ->with('modal_id', $id);
+        }
+        
+        $categoria = Categoria::findOrFail($id);
+        $categoria->nombre = $request->nombre;
+        $categoria->save();
+
+        return redirect()->route('admin.categorias.index')
+            ->with('mensaje', 'Catergoría actualizada exitosamente')
+            ->with('icono', 'success');
     }
 
     /**
