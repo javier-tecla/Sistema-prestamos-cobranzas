@@ -205,7 +205,45 @@
                                     </form>
                                 </flux:modal>
 
-                                <form action="{{ url('/admin/categoria/' . $categoria->id) }}" method="post"
+
+                                <flux:modal.trigger name="delete-categoria{{ $categoria->id }}" variant="danger">
+                                    <flux:button icon="trash" size="sm"
+                                        class="bg-red-500! hover:bg-red-600! text-white! text-xs! font-semibold! px-4! py-2! rounded! transition border-none cursor-pointer">
+                                        Borrar</flux:button>
+                                </flux:modal.trigger>
+
+                                <flux:modal name="delete-categoria{{ $categoria->id }}" class="min-w-[22rem]">
+                                    <form action="{{ url('/admin/categoria/'.$categoria->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <div class="space-y-6">
+                                            <div>
+                                                <flux:heading size="lg">Borrar categoría</flux:heading>
+
+                                                <flux:text class="mt-2">
+                                                    Estás a punto de borrar esta categoría.<br>
+                                                    Esta acción no se puede deshacer.
+                                                </flux:text>
+                                            </div>
+
+                                            <div class="flex gap-2">
+                                                <flux:spacer />
+
+                                                <flux:modal.close>
+                                                    <flux:button variant="ghost">Cancelar</flux:button>
+                                                </flux:modal.close>
+
+                                                <flux:button type="submit" variant="danger">Borrar categoría
+                                                </flux:button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </flux:modal>
+
+
+
+
+                                {{-- <form action="{{ url('/admin/categoria/' . $categoria->id) }}" method="post"
                                     id="miFormulario{{ $categoria->id }}">
                                     @csrf
                                     @method('DELETE')
@@ -236,7 +274,7 @@
                                             }
                                         });
                                     }
-                                </script>
+                                </script> --}}
                             </div>
                         </td>
                     </tr>
