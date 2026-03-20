@@ -11,7 +11,7 @@ Table usuarios {
     eliminado_en timestamp [default: `now()`]
 }
 
-Table clintes {
+Table clientes {
     id int [pk, increment]
     user_id int [ref: > usuarios.id]
 
@@ -39,5 +39,24 @@ Table categorias {
      
     creado_en timestamp [default: `now()`]
     actualizado_en timestamp [default: `now()`]
+}
 
+Table prestamos {
+    id int [pk, increment]
+
+    cliente_id int [ref: > clientes.id]
+    categoria_id int [ref: > categorias.id]
+
+    monto_prestado decimal(10,2)
+    tasa_interes decimal(5,2)
+    modalidad_pago varchar(50)
+    modalidad_amortizacion varchar(50)
+    nro_cuotas int
+    monto_interes_total decimal(10,2)
+    monto_total_a_pagar decimal(10,2)
+    fecha_inicio date
+    estado varchar(50) [default: 'pendiente']
+
+    creado_en timestamp [default: `now()`]
+    actualizado_en timestamp [default: `now()`]
 }
