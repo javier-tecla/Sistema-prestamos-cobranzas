@@ -73,3 +73,7 @@ Route::get('/admin/categorias', [App\Http\Controllers\CategoriaController::class
 Route::post('/admin/categorias/create', [App\Http\Controllers\CategoriaController::class, 'store'])->name('admin.categorias.store')->middleware('auth');
 Route::put('/admin/categoria/{id}', [App\Http\Controllers\CategoriaController::class, 'update'])->name('admin.categorias.update')->middleware('auth');
 Route::delete('/admin/categoria/{id}', [App\Http\Controllers\CategoriaController::class,'destroy'])->name('admin.categorias.destroy')->middleware('auth');
+
+//rutas para prestamos
+Route::get('/admin/prestamos', [App\Http\Controllers\PrestamoController::class, 'index'])->name('admin.prestamos.index')->middleware('auth');
+Route::get('/admin/prestamos/create', [App\Http\Controllers\PrestamoController::class, 'create'])->name('admin.prestamos.create')->middleware('auth');

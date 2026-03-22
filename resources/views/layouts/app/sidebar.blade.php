@@ -32,6 +32,9 @@
                 <flux:navlist.item icon="tag" :href="route('admin.categorias.index')"
                     :current="request()->routeIs('admin.categorias.index')" wire:navigate>{{ __('Categorias') }}
                 </flux:navlist.item>
+                <flux:navlist.item icon="currency-dollar" :href="route('admin.prestamos.index')"
+                    :current="request()->routeIs('admin.prestamos.index')" wire:navigate>{{ __('Préstamos') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

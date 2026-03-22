@@ -1,4 +1,4 @@
-<x-layouts::app title="Listado de usuarios">
+<x-layouts::app title="Listado de clientes">
     <div class="relative mb-6 w-full">
         <div class="flex items-center justify-between mb-4">
             <flux:heading size="xl" level="1">Listado de Clientes</flux:heading>

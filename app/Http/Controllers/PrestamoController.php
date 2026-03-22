@@ -12,7 +12,8 @@ class PrestamoController extends Controller
      */
     public function index()
     {
-        //
+        $prestamos = Prestamo::paginate(10);
+        return view('admin.prestamos.index', compact('prestamos'));
     }
 
     /**
@@ -20,7 +21,7 @@ class PrestamoController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.prestamos.create');
     }
 
     /**
