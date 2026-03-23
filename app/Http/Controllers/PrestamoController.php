@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ajuste;
+use App\Models\Categoria;
+use App\Models\Cliente;
 use App\Models\Prestamo;
 use Illuminate\Http\Request;
 
@@ -21,7 +24,10 @@ class PrestamoController extends Controller
      */
     public function create()
     {
-        return view('admin.prestamos.create');
+        $clientes = Cliente::all();
+        $categorias = Categoria::all();
+        $ajuste = Ajuste::first();
+        return view('admin.prestamos.create', compact('clientes', 'categorias', 'ajuste'));
     }
 
     /**
