@@ -25,14 +25,16 @@
                     <div class="flex gap-4">
 
                         <div class="flex-1">
-                            <flux:label>Monto del préstamo <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Monto del préstamo <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:input name="monto_prestado" type="number" step="0.01" placeholder="5000.00"
                                 icon="currency-dollar" required value="{{ old('monto_prestado') }}" />
                             <flux:error name="monto_prestado" />
                         </div>
 
                         <div class="flex-1">
-                            <flux:label>Tasa de interés (%) <span class="text-red-500">(*)</span>
+                            <flux:label>Tasa de interés (%) <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup>
                             </flux:label>
                             <div class="flex gap-2">
                                 <flux:input name="tasa_interes" type="number" step="0.01" placeholder="10" required
@@ -42,7 +44,8 @@
                         </div>
 
                         <div class="flex-1">
-                            <flux:label>Modalidad de pago <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Modalidad de pago <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:select name="modalidad_pago" required>
                                 <option value="" disabled selected>Seleccione...</option>
                                 <option value="Semanal" {{ old('modalidad_pago') == 'Semanal' ? 'selected' : '' }}>
@@ -65,7 +68,8 @@
 
                     <div class="flex gap-4">
                         <div class="flex-1">
-                            <flux:label>Modalidad Amortización <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Modalidad Amortización <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:select name="modalidad_amortizacion" required>
                                 <option value="" disabled selected>Seleccione...</option>
                                 <option value="Francés"
@@ -82,14 +86,16 @@
                         </div>
 
                         <div class="flex-1">
-                            <flux:label>Nro de cuotas <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Nro de cuotas <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:input name="nro_cuotas" type="number" placeholder="12" icon="calculator" required
                                 value="{{ old('nro_cuotas') }}" />
                             <flux:error name="nro_cuotas" />
                         </div>
 
                         <div class="flex-1">
-                            <flux:label>Fecha de inicio <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Fecha de inicio <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:input name="fecha_inicio" type="date" required
                                 value="{{ old('fecha_inicio', date('Y-m-d')) }}" />
                             <flux:error name="fecha_inicio" />
@@ -192,7 +198,8 @@
                     <div class="flex gap-4">
 
                         <div class="flex-1">
-                            <flux:label>Cliente <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Cliente <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:select name="cliente_id" required>
                                 <option value="" disabled selected>Seleccione...</option>
                                 @foreach ($clientes as $cliente)
@@ -206,7 +213,8 @@
                         </div>
 
                         <div class="flex-1">
-                            <flux:label>Categorías <span class="text-red-500">(*)</span></flux:label>
+                            <flux:label>Categorías <sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                             <flux:select name="categoria_id" required>
                                 <option value="" disabled selected>Seleccione...</option>
                                 @foreach ($categorias as $categoria)
@@ -240,7 +248,6 @@
                 </flux:button>
             </div>
         </div>
-
     </form>
 
     <script>
