@@ -17,9 +17,10 @@ class PrestamoController extends Controller
      */
     public function index()
     {
-        $prestamos = Prestamo::paginate(10);
-
-        return view('admin.prestamos.index', compact('prestamos'));
+        $ajuste = Ajuste::first();
+        $prestamos = Prestamo::with('cliente', 'categoria', 'pagos')->paginate(10);
+        // return response()->json($prestamos);
+        return view('admin.prestamos.index', compact('prestamos', 'ajuste'));
     }
 
     /**

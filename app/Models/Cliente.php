@@ -32,4 +32,9 @@ class Cliente extends Model
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class);
+    }
 }

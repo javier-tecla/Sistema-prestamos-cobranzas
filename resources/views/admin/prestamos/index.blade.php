@@ -60,6 +60,27 @@
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nro</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Cliente</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Documento</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Categoría</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Monto Préstado</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Tasa de Interés</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Modalidad de pago</th>
+                        <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Nro de cuotas</th>
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Acciones</th>
@@ -74,6 +95,34 @@
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $nro++ }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->cliente->apellidos.' '.$prestamo->cliente->nombres }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->cliente->tipo_documento.' '.$prestamo->cliente->numero_documento }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->categoria->nombre }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $ajuste->divisa }} {{ number_format($prestamo->monto_prestado, 2) }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->tasa_interes }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->modalidad_pago }}</td>
+
+                            <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $prestamo->nro_cuotas }}</td>
 
 
                         <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">
