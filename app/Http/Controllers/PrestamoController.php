@@ -112,9 +112,13 @@ class PrestamoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Prestamo $prestamo)
+    public function show($id)
     {
-        //
+        $ajuste = Ajuste::first();
+        // echo 'Mostrando detalles del prestamo con ID:' . $id;
+        $prestamo = Prestamo::with('cliente', 'categoria', 'pagos')->findOrFail($id);
+        // return response()->json($prestamo);
+        return view('admin.prestamos.show', compact('prestamo', 'ajuste'));
     }
 
     /**
