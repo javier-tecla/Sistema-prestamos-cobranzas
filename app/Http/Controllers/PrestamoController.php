@@ -211,8 +211,19 @@ class PrestamoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Prestamo $prestamo)
+    public function destroy($id)
     {
-        //
+        // echo "Eliminar préstamo con ID: " . $id;
+        try {
+            $prestamo = Prestamo::findOrFail($id);
+            $prestamo->delete();
+            return redirect()->route('admin.prestamos.index')
+                ->with('mensaje', 'Préstamo eliminado exitosamente')
+                ->with('icono', 'success');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('mensaje', 'Error al eliminar el préstamo: ' . $e->getMessage())
+                ->with('icono', 'error');
+        }
     }
 }

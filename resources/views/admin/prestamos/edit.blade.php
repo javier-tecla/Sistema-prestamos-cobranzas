@@ -667,7 +667,7 @@
 
                 </a>
 
-                <flux:button variant="primary" type="submit" color="green" class="px-5 cursor-pointer">
+                <flux:button variant="primary" type="submit" color="blue" class="px-5 cursor-pointer">
 
                     <i class="fas fa-save mr-2"></i> Actualizar Préstamo
 

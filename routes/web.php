@@ -81,3 +81,4 @@ Route::post('/admin/prestamos/create', [App\Http\Controllers\PrestamoController:
 Route::get('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::class, 'show'])->name('admin.prestamos.show')->middleware('auth');
 Route::get('/admin/prestamo/{id}/edit', [App\Http\Controllers\PrestamoController::class, 'edit'])->name('admin.prestamos.edit')->middleware('auth');
 Route::put('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::class, 'update'])->name('admin.prestamos.update')->middleware('auth');
+Route::delete('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::class, 'destroy'])->name('admin.prestamos.destroy')->middleware('auth');
