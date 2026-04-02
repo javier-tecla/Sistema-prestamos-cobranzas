@@ -84,4 +84,4 @@ Route::put('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::cla
 Route::delete('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::class, 'destroy'])->name('admin.prestamos.destroy')->middleware('auth');
 
 //rutas para pagos
-Route::post('admin/pago/create', [App\Http\Controllers\PagoController::class, 'store'])->name('admin.pagos.store')->middleware('auth');
+Route::post('/admin/pago/create', [App\Http\Controllers\PagoController::class, 'store'])->name('admin.pagos.store')->middleware('auth');

@@ -81,17 +81,35 @@
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Tasa de Interés (%)</flux:label>
+                        <flux:label>Tasa de Interés (%)<sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                         <flux:input name="interes" type="number" value="{{ old('interes', $ajuste->interes ?? '') }}"
                             step="0.01" icon="receipt-percent" placeholder="10.00" />
-                        <flux:error name="interes" />
+                        <flux:error name="interes" required />
+                    </div>
+
+                     <div class="mb-4">
+                        <flux:label>Dias de gracia<sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
+                        <flux:input name="dias_de_gracia" type="number" value="{{ old('dias_de_gracia', $ajuste->dias_de_gracia ?? '') }}"
+                            step="1" icon="calendar" placeholder="0" />
+                        <flux:error name="dias_de_gracia" required/>
                     </div>
 
                     <div class="mb-4">
-                        <flux:label>Tasa de Mora (%)</flux:label>
+                        <flux:label>Tasa de Mora (%)<sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
                         <flux:input name="mora" type="number" value="{{ old('mora', $ajuste->mora ?? '') }}"
                             step="0.01" icon="clock" placeholder="2.00" />
-                        <flux:error name="mora" />
+                        <flux:error name="mora" required />
+                    </div>
+
+                    <div class="mb-4">
+                        <flux:label>Dias de notificación<sup class="text-red-500" title="Campo obligatorio">
+                                (*)</sup></flux:label>
+                        <flux:input name="dias_notificacion" type="number" value="{{ old('dias_notificacion', $ajuste->dias_notificacion ?? '') }}"
+                            step="1" icon="calendar" placeholder="0" />
+                        <flux:error name="dias_notificacion" required/>
                     </div>
 
                     <div class="mb-4">

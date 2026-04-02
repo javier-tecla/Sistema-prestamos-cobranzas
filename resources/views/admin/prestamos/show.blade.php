@@ -629,11 +629,11 @@
 
                                                         <flux:field>
                                                             <flux:label>Fecha de cancelación</flux:label>
-                                                            <flux:input type="date" name="fecha_cancelacion"
-                                                                value="{{ old('fecha_cancelacion', now()->toDateString()) }}"
+                                                            <flux:input type="date" name="fecha_cancelado"
+                                                                value="{{ old('fecha_cancelado', now()->toDateString()) }}"
                                                                 required />
 
-                                                            <flux:error name="fecha_cancelacion" />
+                                                            <flux:error name="fecha_cancelado" />
                                                         </flux:field>
 
                                                         <br>
