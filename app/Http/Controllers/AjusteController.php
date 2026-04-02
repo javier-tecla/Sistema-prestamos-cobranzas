@@ -32,6 +32,8 @@ class AjusteController extends Controller
             'web' => 'nullable|string|max:255',
             'interes' => 'nullable|numeric|min:0|max:100',
             'mora' => 'nullable|numeric|min:0|max:100',
+            'dias_de_gracia' => 'required|integer|min:0',
+            'dias_notificacion' => 'required|integer|min:0',
         ]);
 
         $ajusteExistente = Ajuste::first();
@@ -58,6 +60,8 @@ class AjusteController extends Controller
             $ajusteExistente->web = $request->web;
             $ajusteExistente->interes = $request->interes ?? 10;
             $ajusteExistente->mora = $request->mora ?? 2;
+            $ajusteExistente->dias_de_gracia = $request->dias_de_gracia ?? 0;
+            $ajusteExistente->dias_notificacion = $request->dias_notificacion ?? 0;
             $ajusteExistente->save();
 
             return redirect()->route('admin.ajustes.index')
@@ -83,6 +87,8 @@ class AjusteController extends Controller
             $ajuste->web = $request->web;
             $ajuste->interes = $request->interes ?? 10;
             $ajuste->mora = $request->mora ?? 2;
+            $ajuste->dias_de_gracia = $request->dias_de_gracia ?? 0;
+            $ajuste->dias_notificacion = $request->dias_notificacion ?? 0;
             $ajuste->save();
 
             return redirect()->route('admin.ajustes.index')

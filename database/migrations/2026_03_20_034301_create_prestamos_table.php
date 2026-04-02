@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->decimal('monto_prestado', 10, 2);
             $table->decimal('tasa_interes', 5,2);
-            $table->string('modalida_pago', 50);
+            $table->string('modalidad_pago', 50);
             $table->string('modalidad_amortizacion', 50);
             $table->integer('nro_cuotas');
             $table->decimal('monto_interes_total', 10, 2);
