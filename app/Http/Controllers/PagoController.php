@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ajuste;
 use App\Models\Pago;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PagoController extends Controller
@@ -46,6 +48,62 @@ class PagoController extends Controller
         return redirect()->route('admin.prestamos.show', $pago->prestamo_id)
             ->with('mensaje', 'Pago registrado exitosamente')
             ->with('icono', 'success');
+    }
+
+    public function comprobante($id)
+    {
+        $ajuste = Ajuste::first();
+        $pago = Pago::findOrFail($id);
+        $prestamo = $pago->prestamo;
+        $cliente = $prestamo->cliente;
+
+        $total_pagos = Pago::where('prestamo_id', $prestamo->id)->count();
+        $numero_secuencia = Pago::where('prestamo_id', $prestamo->id)
+            ->where('id', '<=', $pago->id)->count();
+        $numero_secuencia = $numero_secuencia;
+        $numero_pago = "$numero_secuencia de $total_pagos";
+
+        $meses = [
+            'January' => 'enero',
+            'February' => 'febrero',
+            'March' => 'marzo',
+            'April' => 'abril',
+            'May' => 'mayo',
+            'June' => 'junio',
+            'July' => 'Julio',
+            'August' => 'agosto',
+            'September' => 'septiembre',
+            'October' => 'octubre',
+            'November' => 'noviembre',
+            'December' => 'diciembre',
+        ];
+
+        $fecha_pago_programado = $pago->fecha_vencimiento;
+        $timestamp = strtotime($fecha_pago_programado);
+        $dia = date('j', $timestamp);
+        $mes = date('F', $timestamp);
+        $ano = date('Y', $timestamp);
+        $mes_español = $meses[$mes];
+        $fecha_pago_programado = $dia . " de " . $mes_español . " de " . $ano;
+
+        $fecha_cancelado = $pago->fecha_cancelado;
+        $timestamp = strtotime($fecha_cancelado);
+        $dia = date('j', $timestamp);
+        $mes = date('F', $timestamp);
+        $ano = date('Y', $timestamp);
+        $mes_español = $meses[$mes];
+        $fecha_cancelado = $dia . " de " . $mes_español . " de " . $ano;
+
+        $pdf = Pdf::loadView('admin.pagos.comprobante', compact('pago', 'ajuste', 'prestamo', 'cliente', 'numero_pago', 'fecha_pago_programado', 'fecha_cancelado'));
+        $pdf->setOption([
+            'dpi' => 120,
+            'defaultPaperSize' => [0, 0226.77, 0],
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'defaultFont' => 'Arial Narrow',
+        ]);
+        $pdf->setPaper([0, 0, 226.77, 999999], 'portrait');
+        return $pdf->stream('comprobante_pago_'.$pago->id.'.pdf');
     }
 
     /**
