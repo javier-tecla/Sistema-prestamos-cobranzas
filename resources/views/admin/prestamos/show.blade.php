@@ -682,12 +682,51 @@
                                                 </div>
                                             </flux:modal>
                                         @else
-                                            <a href="{{ url('/admin/pago/' . $pago->id . '/comprobante') }}"
-                                                class="inline-flex items-center px-4 py-3 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold rounded transition">
+                                            <flux:modal.trigger name="show-comprobante{{ $pago->id }}"
+                                                variant="primary" data-open-modal>
 
-                                                <i class="fas fa-print mr-2"></i> Comprobante
+                                                <flux:button variant="primary" class="cursor-pointer p-1"
+                                                    color="yellow" icon="printer" title="Ver comprobante del pago">
 
-                                            </a>
+                                                    Ver comprobante</flux:button>
+
+                                            </flux:modal.trigger>
+
+
+
+
+                                            <flux:modal name="show-comprobante{{ $pago->id }}" variant="primary"
+                                                class="w-full max-w-6xl">
+
+                                                <div class="space-y-6">
+
+                                                    <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+
+                                                        <div class="flex items-center gap-3 mb-2">
+
+                                                            <div
+                                                                class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+
+                                                                <i
+                                                                    class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+
+                                                            </div>
+                                                            <div>
+                                                                <flux:heading size="lg">Comprobante de Pago
+
+                                                                    {{ $pago->referencia_pago }}</flux:heading>
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="w-full">
+                                                            <iframe
+                                                                src="{{ url('/admin/pago/' . $pago->id . '/comprobante') }}"
+                                                                frameborder="0" class="w-full h-96" style="height: 650px;"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </flux:modal>
                                         @endif
                                     </td>
                                 </tr>
