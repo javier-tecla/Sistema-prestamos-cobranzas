@@ -60,27 +60,33 @@
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nro</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Cliente</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Documento</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Categoría</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Monto Préstado</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Tasa de Interés</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Modalidad de pago</th>
-                        <th
+                    <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nro de cuotas</th>
+                    <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Cuotas pendientes</th>
+                    <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Estado</th>
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Acciones</th>
@@ -96,33 +102,56 @@
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $nro++ }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
-                            {{ $prestamo->cliente->apellidos.' '.$prestamo->cliente->nombres }}</td>
+                            {{ $prestamo->cliente->apellidos . ' ' . $prestamo->cliente->nombres }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
-                            {{ $prestamo->cliente->tipo_documento.' '.$prestamo->cliente->numero_documento }}</td>
+                            {{ $prestamo->cliente->tipo_documento . ' ' . $prestamo->cliente->numero_documento }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $prestamo->categoria->nombre }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $ajuste->divisa }} {{ number_format($prestamo->monto_prestado, 2) }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $prestamo->tasa_interes }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $prestamo->modalidad_pago }}</td>
 
-                            <td
+                        <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             {{ $prestamo->nro_cuotas }}</td>
+
+                        <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            @php
+                                echo $cuotasPendientes = $prestamo->pagos->where('estado', 'pendiente')->count();
+                            @endphp
+                        </td>
+
+                        <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-center">
+                            @if ($prestamo->estado == 'pendiente')
+                                <span
+                                    class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/20">
+                                    <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
+                                    Pendiente
+                                </span>
+                            @elseif ($prestamo->estado == 'pagado')
+                                <span
+                                    class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 border border-green-200 dark:border-green-500/20">
+                                    <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                    Pagado
+                                </span>
+                            @endif
+                        </td>
 
 
                         <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-center">

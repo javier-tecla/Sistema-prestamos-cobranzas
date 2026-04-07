@@ -45,6 +45,14 @@ class PagoController extends Controller
         $pago->estado = 'pagado';
         $pago->save();
 
+        $cuotasPendientes = $pago->prestamo->pagos->where('estado', 'pendiente')->count();
+
+        if($cuotasPendientes == 0) {
+            $prestamo = $pago->prestamo;
+            $prestamo->estado = 'pagado';
+            $prestamo->save();
+        }
+
         return redirect()->route('admin.prestamos.show', $pago->prestamo_id)
             ->with('mensaje', 'Pago registrado exitosamente')
             ->with('icono', 'success');
@@ -84,7 +92,7 @@ class PagoController extends Controller
         $mes = date('F', $timestamp);
         $ano = date('Y', $timestamp);
         $mes_español = $meses[$mes];
-        $fecha_pago_programado = $dia . " de " . $mes_español . " de " . $ano;
+        $fecha_pago_programado = $dia.' de '.$mes_español.' de '.$ano;
 
         $fecha_cancelado = $pago->fecha_cancelado;
         $timestamp = strtotime($fecha_cancelado);
@@ -92,7 +100,7 @@ class PagoController extends Controller
         $mes = date('F', $timestamp);
         $ano = date('Y', $timestamp);
         $mes_español = $meses[$mes];
-        $fecha_cancelado = $dia . " de " . $mes_español . " de " . $ano;
+        $fecha_cancelado = $dia.' de '.$mes_español.' de '.$ano;
 
         $pdf = Pdf::loadView('admin.pagos.comprobante', compact('pago', 'ajuste', 'prestamo', 'cliente', 'numero_pago', 'fecha_pago_programado', 'fecha_cancelado'));
         $pdf->setOption([
@@ -103,10 +111,9 @@ class PagoController extends Controller
             'defaultFont' => 'Arial Narrow',
         ]);
         $pdf->setPaper([0, 0, 226.77, 999999], 'portrait');
+
         return $pdf->stream('comprobante_pago_'.$pago->id.'.pdf');
     }
-
-    
 
     /**
      * Display the specified resource.
