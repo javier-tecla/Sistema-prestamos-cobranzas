@@ -682,51 +682,95 @@
                                                 </div>
                                             </flux:modal>
                                         @else
-                                            <flux:modal.trigger name="show-comprobante{{ $pago->id }}"
-                                                variant="primary" data-open-modal>
+                                            <div class="flex items-center gap-2">
+                                                <flux:button.group>
+                                                    <flux:modal.trigger name="show-comprobante{{ $pago->id }}"
+                                                        variant="primary" data-open-modal>
 
-                                                <flux:button variant="primary" class="cursor-pointer p-1"
-                                                    color="yellow" icon="printer" title="Ver comprobante del pago">
+                                                        <flux:button variant="primary" class="cursor-pointer p-1"
+                                                            color="yellow" icon="printer"
+                                                            title="Ver comprobante del pago">
 
-                                                    Ver comprobante</flux:button>
+                                                            Ver comprobante</flux:button>
 
-                                            </flux:modal.trigger>
+                                                    </flux:modal.trigger>
 
+                                                    <flux:modal name="show-comprobante{{ $pago->id }}"
+                                                        variant="primary" class="w-full max-w-6xl">
 
-
-
-                                            <flux:modal name="show-comprobante{{ $pago->id }}" variant="primary"
-                                                class="w-full max-w-6xl">
-
-                                                <div class="space-y-6">
-
-                                                    <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
-
-                                                        <div class="flex items-center gap-3 mb-2">
+                                                        <div class="space-y-6">
 
                                                             <div
-                                                                class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                                                class="border-b border-gray-200 dark:border-gray-700 pb-4">
 
-                                                                <i
-                                                                    class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+                                                                <div class="flex items-center gap-3 mb-2">
 
+                                                                    <div
+                                                                        class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+
+                                                                        <i
+                                                                            class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+
+                                                                    </div>
+                                                                    <div>
+                                                                        <flux:heading size="lg">Comprobante de
+                                                                            Pago
+
+                                                                            {{ $pago->referencia_pago }}</flux:heading>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="w-full">
+                                                                    <iframe
+                                                                        src="{{ url('/admin/pago/' . $pago->id . '/comprobante') }}"
+                                                                        frameborder="0" class="w-full h-96"
+                                                                        style="height: 650px;"></iframe>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <flux:heading size="lg">Comprobante de Pago
+                                                        </div>
+                                                    </flux:modal>
+                                                    <flux:modal.trigger name="delete-pago{{ $pago->id }}"
+                                                        variant="danger">
+                                                        <flux:button variant="danger" class="cursor-pointer" style="border-radius: 0px 7px 7px 0px"><i class="fas fa-trash-alt"></i>
+                                                            Borrar</flux:button>
+                                                    </flux:modal.trigger>
 
-                                                                    {{ $pago->referencia_pago }}</flux:heading>
+                                                    <flux:modal name="delete-pago{{ $pago->id }}"
+                                                        class="min-w-[22rem]">
+                                                        <form action="{{ url('/admin/pago/' . $pago->id . '/borrar') }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <div class="space-y-6">
+                                                                <div>
+                                                                    <flux:heading size="lg">Borrar pago
+                                                                    </flux:heading>
 
+                                                                    <flux:text class="mt-2">
+                                                                        Estás a punto de borrar este pago.<br>
+                                                                        Esta acción no se puede deshacer.
+                                                                    </flux:text>
+                                                                </div>
+
+                                                                <div class="flex gap-2">
+                                                                    <flux:spacer />
+
+                                                                    <flux:modal.close>
+                                                                        <flux:button variant="ghost">Cancelar
+                                                                        </flux:button>
+                                                                    </flux:modal.close>
+
+                                                                    <flux:button type="submit" variant="danger">
+                                                                        Borrar
+                                                                        pago
+                                                                    </flux:button>
+                                                                </div>
                                                             </div>
-
-                                                        </div>
-                                                        <div class="w-full">
-                                                            <iframe
-                                                                src="{{ url('/admin/pago/' . $pago->id . '/comprobante') }}"
-                                                                frameborder="0" class="w-full h-96" style="height: 650px;"></iframe>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </flux:modal>
+                                                        </form>
+                                                    </flux:modal>
+                                                </flux:button.group>
+                                            </div>
                                         @endif
                                     </td>
                                 </tr>
