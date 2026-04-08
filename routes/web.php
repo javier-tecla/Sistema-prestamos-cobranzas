@@ -77,6 +77,7 @@ Route::delete('/admin/categoria/{id}', [App\Http\Controllers\CategoriaController
 //rutas para prestamos
 Route::get('/admin/prestamos', [App\Http\Controllers\PrestamoController::class, 'index'])->name('admin.prestamos.index')->middleware('auth');
 Route::get('/admin/prestamos/create', [App\Http\Controllers\PrestamoController::class, 'create'])->name('admin.prestamos.create')->middleware('auth');
+Route::get('/admin/prestamo/{id}/contrato', [App\Http\Controllers\PrestamoController::class, 'contrato'])->name('admin.prestamos.contrato')->middleware('auth');
 Route::post('/admin/prestamos/create', [App\Http\Controllers\PrestamoController::class, 'store'])->name('admin.prestamos.store')->middleware('auth');
 Route::get('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::class, 'show'])->name('admin.prestamos.show')->middleware('auth');
 Route::get('/admin/prestamo/{id}/edit', [App\Http\Controllers\PrestamoController::class, 'edit'])->name('admin.prestamos.edit')->middleware('auth');
@@ -87,3 +88,4 @@ Route::delete('/admin/prestamo/{id}', [App\Http\Controllers\PrestamoController::
 Route::post('/admin/pago/create', [App\Http\Controllers\PagoController::class, 'store'])->name('admin.pagos.store')->middleware('auth');
 Route::get('/admin/pago/{id}/comprobante', [App\Http\Controllers\PagoController::class, 'comprobante'])->name('admin.pagos.comprobante')->middleware('auth');
 Route::delete('/admin/pago/{id}/borrar', [App\Http\Controllers\PagoController::class, 'destroy'])->name('admin.pagos.destroy')->middleware('auth');
+

@@ -158,10 +158,16 @@
 
                             <div class="flex justify-center gap-2">
 
+                                <a href="{{ url('/admin/prestamo/' . $prestamo->id . '/contrato') }}" target="__black"
+                                    class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-semibold rounded transition">
+                                    <i class="fas fa-print mr-2"></i> Contrato
+                                </a>
+
                                 <a href="{{ url('/admin/prestamo/' . $prestamo->id) }}"
                                     class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
                                     <i class="fas fa-eye mr-2"></i> Ver
                                 </a>
+
                                 <a href="{{ url('/admin/prestamo/' . $prestamo->id . '/edit') }}"
                                     class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
                                     <i class="fas fa-pencil-alt mr-2"></i> Editar
