@@ -89,3 +89,5 @@ Route::post('/admin/pago/create', [App\Http\Controllers\PagoController::class, '
 Route::get('/admin/pago/{id}/comprobante', [App\Http\Controllers\PagoController::class, 'comprobante'])->name('admin.pagos.comprobante')->middleware('auth');
 Route::delete('/admin/pago/{id}/borrar', [App\Http\Controllers\PagoController::class, 'destroy'])->name('admin.pagos.destroy')->middleware('auth');
 
+//rutas para notificaciones
+Route::get('/admin/notificaciones', [App\Http\Controllers\NotificacionController::class, 'index'])->name('admin.notificaciones.index')->middleware('auth');
