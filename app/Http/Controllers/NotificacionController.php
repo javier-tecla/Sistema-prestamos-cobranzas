@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CuotasVencidasMail;
 use App\Models\Ajuste;
 use App\Models\Cliente;
+use App\Models\Pago;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class NotificacionController extends Controller
 {
@@ -60,5 +64,58 @@ class NotificacionController extends Controller
                 ->values();
 
         return view('admin.notificaciones.index', compact('clientes', 'ajuste', 'buscar'));
+    }
+
+    public function notificarEmail(Cliente $cliente)
+    {
+        $email = $cliente->user->email;
+
+        if (!$email) {
+            return redirect()->route('admin.notificaciones.index')
+                ->with('mensaje', 'El cliente no tiene un email regístrado para enviar la notificación')
+                ->with('icono', 'error');
+        }
+
+        $ajuste = Ajuste::first();
+        $resumen = $this->obtenerResumenVencido($cliente, $ajuste);
+
+        try {
+            Mail::to($email)->send(new CuotasVencidasMail($resumen));
+            return redirect()->route('admin.notificaciones.index')
+            ->with('mensaje', 'Notificación por email enviada correctamente al cliente: ' . $cliente->nombres . ' ' . $cliente->apellidos)
+            ->with('icono', 'success');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.notificaciones.index')
+                ->with('mensaje', 'Error al enviar la notificacion por email: ' . $e->getMessage())
+                ->with('icono', 'error');
+        }
+    }
+
+    private function obtenerResumenVencido(Cliente $cliente, ?Ajuste $ajuste): array
+    {
+        $pagosVencidos = Pago::query()
+            ->whereHas('prestamo', function ($query) use ($cliente) {
+                $query->where('cliente_id', $cliente->id);
+            })
+            ->where('estado', 'pendiente')
+            ->whereDate('fecha_vencimiento', '<', now()->toDateString())
+            ->orderBy('fecha_vencimiento')
+            ->get();
+
+        $montoVencidoTotal = $pagosVencidos->sum(function ($pago) {
+            return max(((float) $pago->monto_cuota) - ((float) $pago->monto_total_pagado), 0);
+        });
+
+        $primerVencimiento = optional($pagosVencidos->first())->fecha_vencimiento;
+
+        return [
+            'cliente' => $cliente,
+            'divisa' => $ajuste->divisa ?? '$',
+            'cuotas_vencidas_total' => $pagosVencidos->count(),
+            'monto_vencido_total' => $montoVencidoTotal,
+            'primer_vencimiento' => $primerVencimiento,
+            'primer_vencimiento_formateado' => $primerVencimiento ? Carbon::parse($primerVencimiento)->format('d/m/Y') : '-',
+            'fecha_actual' => now()->format('d/m/Y'),
+        ];
     }
 }
