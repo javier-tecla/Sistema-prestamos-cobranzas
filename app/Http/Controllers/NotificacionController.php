@@ -118,4 +118,33 @@ class NotificacionController extends Controller
             'fecha_actual' => now()->format('d/m/Y'),
         ];
     }
+
+    public function notificarWhatsapp(Cliente $cliente)
+    {
+        // echo $cliente;
+        $ajuste = Ajuste::first();
+        $resumen = $this->obtenerResumenVencido($cliente, $ajuste);
+
+        $telefono = preg_replace('/\D+/','', (string) $cliente->celular);
+
+        if (!$telefono) {
+            return redirect()->back()
+                ->with('mensaje', 'El cliente no tiene un número de celular válido')
+                ->with('icono', 'error');
+        }
+
+        $mensajeWhatsapp = "*Recordatorio de pago*\n"
+        . "Estimado(a) {$cliente->nombres} {$cliente->apellidos},\n\n"
+        . "Le informamos que tiene *{$resumen['cuotas_vencidas_total']} cuota(s) vencida(s)*.\n"
+        . "Monto vencido total: *{$resumen['divisa']} " . number_format($resumen['monto_vencido_total'], 2) . "*\n"
+        . "Primer vencimiento: *{$resumen['primer_vencimiento_formateado']}*\n\n"
+        . "Por favor regularice su pago a la brevedad.\n"
+        . "Si ya realizó el pago, ignore este mensaje\n\n"
+        . "Atentamente,\nArea de Cobranzas";
+
+        $url = 'https://wa.me/' . $telefono . '?text=' . urlencode($mensajeWhatsapp);
+
+        return redirect()->away($url);
+        
+    }
 }
