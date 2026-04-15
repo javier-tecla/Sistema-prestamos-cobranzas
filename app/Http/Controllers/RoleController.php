@@ -65,6 +65,14 @@ class RoleController extends Controller
         return view('admin.roles.show', compact('rol'));
     }
 
+    public function permisos(string $id)
+    {
+        $rol = Role::find($id);
+        $permisos = $rol->permissions()->pluck('name')->toArray();
+        //return response()->json($permisos);
+        return view('admin.roles.permisos', compact('rol', 'permisos'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
