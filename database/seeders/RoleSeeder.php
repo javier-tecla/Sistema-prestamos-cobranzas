@@ -83,6 +83,11 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'Enviar notificacion por email'])->syncRoles($super_admin);
         Permission::create(['name' => 'Enviar notificacion por whatsapp'])->syncRoles($super_admin);
 
+        //permisos para backups
+        Permission::create(['name' => 'Ver listado de backups'])->syncRoles($super_admin);
+        Permission::create(['name' => 'Crear backup'])->syncRoles($super_admin);
+        Permission::create(['name' => 'Descargar backup'])->syncRoles($super_admin);
+        Permission::create(['name' => 'Eliminar backup'])->syncRoles($super_admin);
 
     }
 }
