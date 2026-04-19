@@ -36,6 +36,15 @@ class AdminController extends Controller
             ->value('total');
         $carteraActivaTotal = $saldoPendienteTotal;
 
-        return view('admin.index', compact('ajuste','totalClientes', 'clientesNuevosMes', 'total_roles', 'rolesNuevoMes', 'totalUsuarios', 'usuariosNuevosMes', 'montoPrestadoTotal', 'capitalRecuperadoTotal', 'saldoPendienteTotal', 'carteraActivaTotal', 'totalCategorias','categoriasNuevasMes' ));
+        $totalPrestamos = Prestamo::count();
+        $prestamosNuevosMes = Prestamo::whereMonth('created_at', now()->month)->count();
+
+        $totalPrestamosActivos = Prestamo::where('estado', 'pendiente')->count();  
+        $prestamosActivosMes = Prestamo::where('estado', 'pendiente')
+                    ->whereMonth('created_at', now()->month)
+                    ->whereYear('created_at', now()->year)
+                    ->count();
+
+        return view('admin.index', compact('ajuste','totalClientes', 'clientesNuevosMes', 'total_roles', 'rolesNuevoMes', 'totalUsuarios', 'usuariosNuevosMes', 'montoPrestadoTotal', 'capitalRecuperadoTotal', 'saldoPendienteTotal', 'carteraActivaTotal', 'totalCategorias','categoriasNuevasMes', 'totalPrestamos', 'prestamosNuevosMes', 'totalPrestamosActivos', 'prestamosActivosMes' ));
     }
 }

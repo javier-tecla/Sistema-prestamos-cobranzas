@@ -104,6 +104,54 @@
             </div>
         </div>
 
+        <!--Total Préstamos -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Préstamos</flux:text>
+                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                        {{ $totalPrestamos ?? 0 }}
+                    </flux:heading>
+                    <flux:text class="text-rose-600 dark:yexy-rose-400 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        {{ $prestamosNuevosMes ?? 0 }} nuevos este mes
+                    </flux:text>
+                </div>
+                <div class="p-3 bg-rose-100 dark:bg-rose-900/30 rounded-lg">
+                    <i class="fas fa-file-invoice-dollar text-rose-600 dark:text-rose-400 text-2xl"></i>
+                </div>
+            </div>
+            <div class="h-12" style="margin-top:-25px">
+                <canvas id="chartPrestamos" class="w-full block" height="48"></canvas>
+            </div>
+        </div>
+
+
+        <!--Préstamos Activos -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Préstamos Activos
+                    </flux:text>
+                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                        {{ $totalPrestamosActivos ?? 0 }}
+                    </flux:heading>
+                    <flux:text class="text-cyan-600 dark:yexy-cyan-400 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        {{ $prestamosActivosMes ?? 0 }} activos este mes
+                    </flux:text>
+                </div>
+                <div class="p-3 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg">
+                    <i class="fas fa-hand-holding-dollar text-cyan-600 dark:text-cyan-400 text-2xl"></i>
+                </div>
+            </div>
+            <div class="h-12" style="margin-top:-25px">
+                <canvas id="chartPrestamosActivos" class="w-full block" height="48"></canvas>
+            </div>
+        </div>
+
     </div>
 
     <!-- -->
@@ -137,6 +185,8 @@
     </div>
 
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {{-- Chart Roles --}}
     <script>
         (() => {
             let chart, raf;
@@ -197,6 +247,7 @@
         })();
     </script>
 
+    {{-- Chart Usuarios --}}
     <script>
         (() => {
             let chart, raf;
@@ -257,6 +308,7 @@
         })();
     </script>
 
+    {{-- Chart Clientes --}}
     <script>
         (() => {
             let chart, raf;
@@ -317,6 +369,7 @@
         })();
     </script>
 
+    {{-- Chart Categorias --}}
     <script>
         (() => {
             let chart, raf;
@@ -377,6 +430,7 @@
         })();
     </script>
 
+    {{-- Chart Cartera --}}
     <script>
         (() => {
             let chart, raf;
@@ -408,6 +462,128 @@
 
             const init = () => {
                 const el = document.getElementById("chartCartera");
+                if (!el) return;
+                chart?.destroy?.();
+                chart = new Chart(el, cfg());
+            };
+
+            ["DOMContentLoaded", "livewire:load"].forEach(e => document.addEventListener(e, init));
+            init();
+
+            new MutationObserver(() => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    raf = null;
+                    init();
+                });
+            }).observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        })();
+    </script>
+
+    {{-- Chart Prestamos --}}
+    <script>
+        (() => {
+            let chart, raf;
+            const cfg = () => ({
+                type: "line",
+                data: {
+                    labels: ["S1", "S2", "S3", "S4", "S5"],
+                    datasets: [{
+                        data: [10, 15, 12, 20, 25],
+                        borderColor: "#E11048",
+                        backgroundColor: "rgba(225,29,72,.12)",
+                        borderWidth: 2,
+                        fill: true,
+                        tension: .4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false,
+                            min: 0
+                        },
+                        x: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const init = () => {
+                const el = document.getElementById("chartPrestamos");
+                if (!el) return;
+                chart?.destroy?.();
+                chart = new Chart(el, cfg());
+            };
+
+            ["DOMContentLoaded", "livewire:load"].forEach(e => document.addEventListener(e, init));
+            init();
+
+            new MutationObserver(() => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    raf = null;
+                    init();
+                });
+            }).observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        })();
+    </script>
+
+    {{-- Chart Prestamos Activos --}}
+    <script>
+        (() => {
+            let chart, raf;
+            const cfg = () => ({
+                type: "line",
+                data: {
+                    labels: ["S1", "S2", "S3", "S4", "S5"],
+                    datasets: [{
+                        data: [10, 15, 12, 20, 25],
+                        borderColor: "#0686D4",
+                        backgroundColor: "rgba(6,182,212,.12)",
+                        borderWidth: 2,
+                        fill: true,
+                        tension: .4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false,
+                            min: 0
+                        },
+                        x: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const init = () => {
+                const el = document.getElementById("chartPrestamosActivos");
                 if (!el) return;
                 chart?.destroy?.();
                 chart = new Chart(el, cfg());
