@@ -1,9 +1,24 @@
 <x-layouts::app :title="'Sistema de Prestamos y Cobranzas - Admin'">
-    <div class="mb-6">
-        <flux:heading size="xl" level="1">Bienvenido al Sistema</flux:heading>
-        <flux:text class="mt-2 text-gray-600 dark:text-gray-400">
-            Resumen general del sistema de préstamos y cobranzas
-        </flux:text>
+    <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+            <flux:heading size="xl" level="1">Bienvenido al Sistema</flux:heading>
+            <flux:text class="mt-2 text-gray-600 dark:text-gray-400">
+                Resumen general del sistema de préstamos y cobranzas
+            </flux:text>
+        </div>
+        <div>
+
+            <flux:text class="text-gray-600 dark:text-white text-xs font-medium">
+                <i class="fas fa-user-shield mr-1"></i>
+                Rol del usuario
+            </flux:text>
+             <flux:text>
+            <b class="text-gray-600 dark:text-gray-400 text-xs font-medium">
+                <i class="fas fa-id-badge mr-1"></i>
+                {{ Auth::user()->roles->pluck('name')->implode(', ') }}
+            </b>
+             </flux:text>
+        </div>
     </div>
 
     <flux:separator variant="subtle" />
@@ -183,7 +198,8 @@
 
     <!-- -->
     <div class="grid gap-4 mb-8" style="grid-template-columns: repeat(12, minmax(0, 1fr));">
-        <div class=" bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition" style="grid-column: span 3 / span 3;">
+        <div class=" bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition"
+            style="grid-column: span 3 / span 3;">
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-mediun">Cartera Activa
