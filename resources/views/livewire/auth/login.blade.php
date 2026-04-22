@@ -9,28 +9,13 @@
             @csrf
 
             <!-- Email Address -->
-            <flux:input
-                name="email"
-                :label="__('Email address')"
-                :value="old('email')"
-                type="email"
-                required
-                autofocus
-                autocomplete="email"
-                placeholder="email@example.com"
-            />
+            <flux:input name="email" :label="__('Email address')" :value="old('email')" type="email" required
+                autofocus autocomplete="email" placeholder="email@example.com" />
 
             <!-- Password -->
             <div class="relative">
-                <flux:input
-                    name="password"
-                    :label="__('Password')"
-                    type="password"
-                    required
-                    autocomplete="current-password"
-                    :placeholder="__('Password')"
-                    viewable
-                />
+                <flux:input name="password" :label="__('Password')" type="password" required
+                    autocomplete="current-password" :placeholder="__('Password')" viewable />
 
                 @if (Route::has('password.request'))
                     <flux:link class="absolute top-0 text-sm end-0" :href="route('password.request')" wire:navigate>
@@ -48,6 +33,24 @@
                 </flux:button>
             </div>
         </form>
+
+        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+            <small>Usuario de prueba:</small>
+
+            <hr>
+            <br>
+
+            <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Email:</strong>
+                <span class="font-mono">
+                    test@example.com
+                </span>
+            </p>
+            <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Password:</strong>
+                <span class="font-mono">
+                    12345678
+                </span>
+            </p>
+        </div>
 
         @if (Route::has('register'))
             <div class="space-x-1 text-sm text-center rtl:space-x-reverse text-zinc-600 dark:text-zinc-400">
