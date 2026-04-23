@@ -12,12 +12,12 @@
                 <i class="fas fa-user-shield mr-1"></i>
                 Rol del usuario
             </flux:text>
-             <flux:text>
-            <b class="text-gray-600 dark:text-gray-400 text-xs font-medium">
-                <i class="fas fa-id-badge mr-1"></i>
-                {{ Auth::user()->roles->pluck('name')->implode(', ') }}
-            </b>
-             </flux:text>
+            <flux:text>
+                <b class="text-gray-600 dark:text-gray-400 text-xs font-medium">
+                    <i class="fas fa-id-badge mr-1"></i>
+                    {{ Auth::user()->roles->pluck('name')->implode(', ') }}
+                </b>
+            </flux:text>
         </div>
     </div>
 
@@ -27,219 +27,236 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 
-        <!--Total Roles -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Roles</flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $total_roles ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-indigo-600 dark:text-indigo-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $total_roles ?? 0 }} nuevos este mes
-                    </flux:text>
+        @can('Ver listado de roles')
+            <!--Total Roles -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Roles</flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $total_roles ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-indigo-600 dark:text-indigo-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $total_roles ?? 0 }} nuevos este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
+                        <i class="fas fa-shield-alt text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
-                    <i class="fas fa-shield-alt text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartRoles" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartRoles" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
+        @endcan
 
-        <!--Total Usuarios -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Usuarios</flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $totalUsuarios ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-violet-600 dark:text-violet-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $usuariosNuevosMes ?? 0 }} nuevos este mes
-                    </flux:text>
+        @can('Ver listado de usuarios')
+            <!--Total Usuarios -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Usuarios</flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $totalUsuarios ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-violet-600 dark:text-violet-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $usuariosNuevosMes ?? 0 }} nuevos este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-violet-100 dark:bg-violet-900/30 rounded-lg">
+                        <i class="fas fa-users text-violet-600 dark:text-violet-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-violet-100 dark:bg-violet-900/30 rounded-lg">
-                    <i class="fas fa-users text-violet-600 dark:text-violet-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartUsuarios" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartUsuarios" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
+        @endcan
 
-        <!--Total Clientes -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Clientes</flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $totalClientes ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-blue-600 dark:text-blue-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $clientesNuevosMes ?? 0 }} nuevos este mes
-                    </flux:text>
+        @can('Ver listado de clientes')
+            <!--Total Clientes -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Clientes</flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $totalClientes ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-blue-600 dark:text-blue-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $clientesNuevosMes ?? 0 }} nuevos este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                        <i class="fas fa-users text-blue-600 dark:text-blue-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <i class="fas fa-users text-blue-600 dark:text-blue-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartClientes" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartClientes" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
+        @endcan
 
-        <!--Total Categorías -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Categorías</flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $totalCategorias ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-amber-600 dark:text-blue-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $categoriasNuevasMes ?? 0 }} nuevas este mes
-                    </flux:text>
+        @can('Ver listado de categorias')
+            <!--Total Categorías -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Categorías</flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $totalCategorias ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-amber-600 dark:text-blue-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $categoriasNuevasMes ?? 0 }} nuevas este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
+                        <i class="fas fa-tags text-amber-600 dark:text-amber-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg">
-                    <i class="fas fa-tags text-amber-600 dark:text-amber-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartCategorias" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartCategorias" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
+        @endcan
 
-        <!--Total Préstamos -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Préstamos</flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $totalPrestamos ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-rose-600 dark:text-rose-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $prestamosNuevosMes ?? 0 }} nuevos este mes
-                    </flux:text>
+        @can('Ver listado de prestamos')
+            <!--Total Préstamos -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Préstamos</flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $totalPrestamos ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-rose-600 dark:text-rose-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $prestamosNuevosMes ?? 0 }} nuevos este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-rose-100 dark:bg-rose-900/30 rounded-lg">
+                        <i class="fas fa-file-invoice-dollar text-rose-600 dark:text-rose-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-rose-100 dark:bg-rose-900/30 rounded-lg">
-                    <i class="fas fa-file-invoice-dollar text-rose-600 dark:text-rose-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartPrestamos" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartPrestamos" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
+        @endcan
 
-
-        <!--Préstamos Activos -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Préstamos Activos
-                    </flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $totalPrestamosActivos ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-cyan-600 dark:text-cyan-400 text-xs mt-2">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        {{ $prestamosActivosMes ?? 0 }} activos este mes
-                    </flux:text>
+        @can('Ver listado de prestamos')
+            <!--Préstamos Activos -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Préstamos Activos
+                        </flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $totalPrestamosActivos ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-cyan-600 dark:text-cyan-400 text-xs mt-2">
+                            <i class="fas fa-arrow-up mr-1"></i>
+                            {{ $prestamosActivosMes ?? 0 }} activos este mes
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg">
+                        <i class="fas fa-hand-holding-dollar text-cyan-600 dark:text-cyan-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg">
-                    <i class="fas fa-hand-holding-dollar text-cyan-600 dark:text-cyan-400 text-2xl"></i>
-                </div>
-            </div>
-            <div class="h-12" style="margin-top:-25px">
-                <canvas id="chartPrestamosActivos" class="w-full block" height="48"></canvas>
-            </div>
-        </div>
-
-        <!--Notificaciones de atrasos -->
-        <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Clientes con atrasos
-                    </flux:text>
-                    <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
-                        {{ $clientesConCuotasVencidas ?? 0 }}
-                    </flux:heading>
-                    <flux:text class="text-red-600 dark:yexy-red-400 text-xs mt-2">
-                        Cuotas vencidas: {{ $cuotasVencidasTotal ?? 0 }}
-                    </flux:text>
-                    <flux:text class="text-red-600 dark:yexy-red-400 text-xs mt-2">
-                        Monto vencido: {{ $ajuste->divisa }} {{ number_format($montoVencidoTotal ?? 0, 2) }}
-                    </flux:text>
-                </div>
-                <div class="p-3 bg-red-100 dark:bg-cyan-900/30 rounded-lg">
-                    <i class="fas fa-bell text-red-600 dark:text-red-400 text-2xl"></i>
+                <div class="h-12" style="margin-top:-25px">
+                    <canvas id="chartPrestamosActivos" class="w-full block" height="48"></canvas>
                 </div>
             </div>
-            <a href="{{ route('admin.notificaciones.index') }}"
-                class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition">
-                <i class="fas fa-eye mr-1.5"></i> Ver listado de notificaciones
-            </a>
-        </div>
+        @endcan
 
-    </div>
-
-    <!-- -->
-    <div class="grid gap-4 mb-8" style="grid-template-columns: repeat(12, minmax(0, 1fr));">
-        <div class=" bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition"
-            style="grid-column: span 3 / span 3;">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-mediun">Cartera Activa
-                    </flux:text>
-                    <flux:heading size="lg" level="3" class="my-2 text-gray-900 dark:text-white">
-                        {{ $ajuste->divisa }} {{ number_format($carteraActivaTotal ?? 0, 2) }}
-                    </flux:heading>
-                    <flux:text class="text-emerald-600 dark:text-emerald-400 text-xs mt-2">
-                        Total Prestado: {{ number_format($montoPrestadoTotal ?? 0, 2) }} <br>
-                        Total Recuperado:
-                        {{ number_format($capitalRecuperadoTotal ?? 0, 2) }}
-                    </flux:text>
-                    <flux:text class="text-amber-600 dark:text-amber-400 text-xs mt-1">
-                        Saldo pendiente: {{ $ajuste->divisa }} {{ number_format($saldoPendienteTotal ?? 0, 2) }}
-                    </flux:text>
+        @can('Ver listado de notificaciones')
+            <!--Notificaciones de atrasos -->
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-medium">Clientes con atrasos
+                        </flux:text>
+                        <flux:heading size="lg" level="3" class="mt-2 text-gray-900 dark:text-white">
+                            {{ $clientesConCuotasVencidas ?? 0 }}
+                        </flux:heading>
+                        <flux:text class="text-red-600 dark:yexy-red-400 text-xs mt-2">
+                            Cuotas vencidas: {{ $cuotasVencidasTotal ?? 0 }}
+                        </flux:text>
+                        <flux:text class="text-red-600 dark:yexy-red-400 text-xs mt-2">
+                            Monto vencido: {{ $ajuste->divisa }} {{ number_format($montoVencidoTotal ?? 0, 2) }}
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-red-100 dark:bg-cyan-900/30 rounded-lg">
+                        <i class="fas fa-bell text-red-600 dark:text-red-400 text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
-                    <i class="fas fa-wallet text-emerald-600 dark:text-emerald-400 text-2xl"></i>
-                </div>
+                <a href="{{ route('admin.notificaciones.index') }}"
+                    class="inline-flex items-center px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition">
+                    <i class="fas fa-eye mr-1.5"></i> Ver listado de notificaciones
+                </a>
             </div>
-            <div class="h-52">
-                <canvas id="chartCartera" class="w-full h-full"></canvas>
-            </div>
-        </div>
-
-
-        <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition"
-            style="grid-column: span 9 / span 9;">
-            <div class="flex items-center justify-between mb-4">
-                <flux:heading size="lg" level="3" class="text-gray-900 dark:text-white">
-                    Capital vs Interés por mes
-                </flux:heading>
-            </div>
-            <!-- CORREGIDO: "height" en lugar de "heing" -->
-            <div style="height: 420px;">
-                <canvas id="chartCapitalInteresMes" class="w-full h-full"></canvas>
-            </div>
-        </div>
+        @endcan
 
     </div>
+
+    @can('Ver listado de prestamos')
+        <!-- -->
+        <div class="grid gap-4 mb-8" style="grid-template-columns: repeat(12, minmax(0, 1fr));">
+            <div class=" bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition"
+                style="grid-column: span 3 / span 3;">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <flux:text class="text-gray-600 dark:text-gray-400 text-sm font-mediun">Cartera Activa
+                        </flux:text>
+                        <flux:heading size="lg" level="3" class="my-2 text-gray-900 dark:text-white">
+                            {{ $ajuste->divisa }} {{ number_format($carteraActivaTotal ?? 0, 2) }}
+                        </flux:heading>
+                        <flux:text class="text-emerald-600 dark:text-emerald-400 text-xs mt-2">
+                            Total Prestado: {{ number_format($montoPrestadoTotal ?? 0, 2) }} <br>
+                            Total Recuperado:
+                            {{ number_format($capitalRecuperadoTotal ?? 0, 2) }}
+                        </flux:text>
+                        <flux:text class="text-amber-600 dark:text-amber-400 text-xs mt-1">
+                            Saldo pendiente: {{ $ajuste->divisa }} {{ number_format($saldoPendienteTotal ?? 0, 2) }}
+                        </flux:text>
+                    </div>
+                    <div class="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
+                        <i class="fas fa-wallet text-emerald-600 dark:text-emerald-400 text-2xl"></i>
+                    </div>
+                </div>
+                <div class="h-52">
+                    <canvas id="chartCartera" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 shadow-md hover:shadow-lg transition"
+                style="grid-column: span 9 / span 9;">
+                <div class="flex items-center justify-between mb-4">
+                    <flux:heading size="lg" level="3" class="text-gray-900 dark:text-white">
+                        Capital vs Interés por mes
+                    </flux:heading>
+                </div>
+                <!-- CORREGIDO: "height" en lugar de "heing" -->
+                <div style="height: 420px;">
+                    <canvas id="chartCapitalInteresMes" class="w-full h-full"></canvas>
+                </div>
+            </div>
+
+
+        </div>
+    @endcan
 
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
