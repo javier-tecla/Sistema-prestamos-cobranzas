@@ -79,3 +79,16 @@ Table pagos {
     creado_en timestamp [default: `now()`]
     actualizado_en timestamp [default: `now()`]
 }
+
+Table pago_parcials {
+    id int [pk, increment]
+
+    pago_id int [ref: > pagos.id]
+    monto_total_de_la_cuota decimal(10,2)
+    monto_pagado decimal(10,2)
+    fecha_pago date
+    detalle_pago varchar(255)
+
+    creado_en timestamp [default: `now()`]
+    actualizado_en timestamp [default: `now()`]
+}
