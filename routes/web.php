@@ -95,6 +95,9 @@ Route::get('/admin/notificaciones', [App\Http\Controllers\NotificacionController
 Route::post('/admin/notificacion/{cliente}/email', [App\Http\Controllers\NotificacionController::class, 'notificarEmail'])->name('admin.notificaciones.notificarEmail')->middleware('auth','can:Enviar notificacion por email');
 Route::get('/admin/notificacion/{cliente}/whatsapp', [App\Http\Controllers\NotificacionController::class, 'notificarWhatsapp'])->name('admin.notificaciones.notificarWhatsapp')->middleware('auth','can:Enviar notificacion por whatsapp');
 
+//rutas para pagos parciales
+Route::post('/admin/pago_parcial/create', [App\Http\Controllers\PagoParcialController::class, 'store'])->name('admin.pago_parcials.store')->middleware('auth', 'can:Guardar pago parcial');
+
 //rutas para backups
 Route::get('/admin/backups', [App\Http\Controllers\BackupController::class, 'index'])->name('admin.backups.index')->middleware('auth', 'can:Ver listado de backups');
 Route::post('/admin/backups/create', [App\Http\Controllers\BackupController::class, 'store'])->name('admin.backups.store')->middleware('auth', 'can:Crear backup');

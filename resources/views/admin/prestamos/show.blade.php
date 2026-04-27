@@ -549,16 +549,28 @@
                                     <td>
 
                                         @if ($estadoPago === 'pendiente')
-                                            <flux:modal.trigger name="show-pagos{{ $pago->id }}"
-                                                variant="primary" data-open-modal>
+                                            <flux:button.group>
+                                                <flux:modal.trigger name="show-pagos{{ $pago->id }}"
+                                                    variant="primary" data-open-modal>
 
-                                                <flux:button variant="primary" class="cursor-pointer p-1"
-                                                    color="green" icon="currency-dollar"
-                                                    title="Ver detalles del pago">
+                                                    <flux:button variant="primary" class="cursor-pointer p-1"
+                                                        color="green" icon="currency-dollar"
+                                                        title="Ver detalles del pago">
+                                                        Pagar</flux:button>
+                                                </flux:modal.trigger>
 
-                                                    Pagar</flux:button>
+                                                <flux:modal.trigger name="show-pagos_parciales{{ $pago->id }}"
+                                                    variant="primary" data-open-modal>
+                                                    <flux:button variant="primary" class="cursor-pointer p-1"
+                                                        color="blue" icon="banknotes"
+                                                        title="Registrar pago parcial">
 
-                                            </flux:modal.trigger>
+                                                        Pago parcial</flux:button>
+
+                                                </flux:modal.trigger>
+                                            </flux:button.group>
+
+
 
 
 
@@ -606,23 +618,23 @@
 
                                                         $montoTotalPagadoOld = old('monto_total_pagado');
 
-                                                        $montoTotalPagadoValue = $montoTotalPagadoOld !== null 
-                                                            ? str_replace(
-                                                                ',',
-                                                                '.',
-                                                                preg_replace(
-                                                                    '/[^\d,.-]/',
+                                                        $montoTotalPagadoValue =
+                                                            $montoTotalPagadoOld !== null
+                                                                ? str_replace(
+                                                                    ',',
+                                                                    '.',
+                                                                    preg_replace(
+                                                                        '/[^\d,.-]/',
+                                                                        '',
+                                                                        (string) $montoTotalPagadoOld,
+                                                                    ),
+                                                                )
+                                                                : number_format(
+                                                                    (float) ($montoTotalSugerido ?? 0),
+                                                                    2,
+                                                                    '.',
                                                                     '',
-                                                                    (string) $montoTotalPagadoOld,
-                                                                ),
-                                                            )
-                                                            : number_format(
-                                                                (float) ($montoTotalSugerido ?? 0),
-                                                                2,
-                                                                '.',
-                                                                '',
-                                                            );
-
+                                                                );
                                                     @endphp
                                                     <form action="{{ url('/admin/pago/create') }}" method="POST">
 
@@ -681,16 +693,28 @@
                                                                 {{ number_format($pago->monto_cuota, 2) }}</p>
                                                         </div>
 
-                                                        <flux:field>
-                                                            <flux:label>Monto total pagado @if ($moraAplicada > 0)
-                                                                    (incluye mora)
-                                                                @endif
-                                                            </flux:label>
-                                                            <flux:input type="number"
-                                                                value="{{ $montoTotalPagadoValue }}"
-                                                                name="monto_total_pagado" step="0.01" required />
-                                                            <flux:error name="monto_total_pagado" />
-                                                        </flux:field>
+                                                        <div
+                                                            class="p-4 rounded-lg bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
+                                                            <flux:field>
+                                                                <flux:label
+                                                                    class="text-xs uppercase text-rose-700 dark:text-rose-300">
+                                                                    MONTO TOTAL PAGADO @if ($moraAplicada > 0)
+                                                                        (incluye mora)
+                                                                    @endif
+                                                                </flux:label>
+
+                                                                <p
+                                                                    class="text-base font-semibold text-gray-900 dark:text-white">
+                                                                    {{ $divisa }}
+                                                                    {{ number_format($montoTotalPagadoValue, 2) }}
+                                                                </p>
+                                                            </flux:field>
+                                                        </div>
+
+                                                        <flux:input type="hidden"
+                                                            value="{{ $montoTotalPagadoValue }}"
+                                                            name="monto_total_pagado" step="0.01" required />
+                                                        <flux:error name="monto_total_pagado" />
 
                                                         <flux:button variant="primary" color="green"
                                                             class="w-full mt-4" type="submit">
@@ -751,13 +775,16 @@
                                                     </flux:modal>
                                                     <flux:modal.trigger name="delete-pago{{ $pago->id }}"
                                                         variant="danger">
-                                                        <flux:button variant="danger" class="cursor-pointer" style="border-radius: 0px 7px 7px 0px"><i class="fas fa-trash-alt"></i>
+                                                        <flux:button variant="danger" class="cursor-pointer"
+                                                            style="border-radius: 0px 7px 7px 0px"><i
+                                                                class="fas fa-trash-alt"></i>
                                                             Borrar</flux:button>
                                                     </flux:modal.trigger>
 
                                                     <flux:modal name="delete-pago{{ $pago->id }}"
                                                         class="min-w-[22rem]">
-                                                        <form action="{{ url('/admin/pago/' . $pago->id . '/borrar') }}"
+                                                        <form
+                                                            action="{{ url('/admin/pago/' . $pago->id . '/borrar') }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('DELETE')
