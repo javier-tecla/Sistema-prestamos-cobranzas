@@ -571,10 +571,6 @@
                                             </flux:button.group>
 
 
-
-
-
-
                                             <flux:modal name="show-pagos{{ $pago->id }}" variant="primary"
                                                 class="md:w-96">
 
@@ -719,6 +715,82 @@
                                                         <flux:button variant="primary" color="green"
                                                             class="w-full mt-4" type="submit">
                                                             Confirmar pago
+                                                        </flux:button>
+                                                    </form>
+
+                                                </div>
+                                            </flux:modal>
+
+                                            <flux:modal name="show-pagos_parciales{{ $pago->id }}" variant="primary"
+                                                class="md:w-96">
+
+                                                <div class="space-y-6">
+
+                                                    <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+
+                                                        <div class="flex items-center gap-3 mb-2">
+
+                                                            <div
+                                                                class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+
+                                                                <i
+                                                                    class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+
+                                                            </div>
+                                                            <div>
+                                                                <flux:heading size="lg">Pago parcial
+
+                                                                    {{ $pago->referencia_pago }}</flux:heading>
+                                                                <flux:text
+                                                                    class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+
+                                                                    Registra un abono parcial para esta cuota.<br> 
+                                                                    El monto total pagado se actualizará automaticamente al confirmar el pago parcial.
+                                                                </flux:text>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <form action="{{ url('/admin/pago_parcial/create') }}" method="POST">
+
+                                                        @csrf
+
+                                                        <input type="hidden" name="pago_id"
+                                                            value="{{ $pago->id }}" />
+                                                            <input type="hidden" name="monto_total_de_la_cuota" value="{{ $montoTotalPagadoValue }}" required/>
+
+                                                        <flux:field>
+                                                            <flux:label>Monto pagado (parcial)</flux:label>
+                                                            <flux:input type="text" name="monto_pagado"
+                                                                value="{{ old('monto_pagado') }}"
+                                                                required />
+
+                                                            <flux:error name="monto_pagado" />
+                                                        </flux:field>
+
+                                                        <br>
+
+                                                        <flux:field>
+                                                            <flux:label>Fecha de pago</flux:label>
+                                                            <flux:input type="date" name="fecha_pago"
+                                                                value="{{ old('fecha_pago', now()->toDateString()) }}"
+                                                                required />
+
+                                                            <flux:error name="fecha_pago" />
+                                                        </flux:field>
+
+                                                        <br>
+
+                                                        <flux:field>
+                                                            <flux:label>Observación (opcional)</flux:label>
+                                                            <flux:input type="text" name="detalle_pago"
+                                                                value="{{ old('detalle_pago') }}" />
+                                                            <flux:error name="detalle_pago" />
+                                                        </flux:field>
+
+                                                        <flux:button variant="primary" color="green"
+                                                            class="w-full mt-4" type="submit">
+                                                            Confirmar pago parcial
                                                         </flux:button>
                                                     </form>
 

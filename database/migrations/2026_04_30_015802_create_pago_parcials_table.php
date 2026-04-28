@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pago_id')->constrained('pagos')->onDelete('cascade');
             $table->decimal('monto_total_de_la_cuota', 10, 2);
+            $table->decimal('monto_pagado', 10, 2);
             $table->date('fecha_pago');
             $table->string('detalle_pago', 255)->nullable();
             $table->timestamps();
