@@ -306,6 +306,7 @@
                                 <th class="py-3 px-4">Fecha cancelado</th>
                                 <th class="py-3 px-4">Total pagado</th>
                                 <th class="py-3 px-4">Estado de la cuota</th>
+                                <th class="py-3 px-4">Pagos parciales</th>
                                 <th class="py-3 px-4">Estado</th>
                                 <th class="py-3 px-4">Acciones</th>
                             </tr>
@@ -534,6 +535,37 @@
                                             @endif
                                         </div>
                                     </td>
+                                    <td class="py-3 px-4">
+                                        <div class="flex flex-col gap1 text-xs min-w[220px]">
+                                            @if ($pago->pagosParciales->isNotEmpty())
+                                                <span
+                                                    class="inline-flex items-center gap-1 rounded-full bg-blue-100 text-blue-700 px-2 py-0.5 text-[11px] font-semibold">
+                                                    {{ $pago->pagosParciales->count() }} pago(s) parcial(es)
+                                                </span>
+                                                <hr>
+                                                @php
+                                                    $total_pago_parcial = 0;
+                                                @endphp
+                                                @foreach ($pago->pagosParciales as $pagoParcial)
+                                                    <span
+                                                        class="inline-flex items-center flex-nowrap whitespace-nowrap gap-1 rounded-full bg-blue-50 text-blue-600 px-2 py-0.5 text[11px] font-medium">
+                                                        <i class="fas fa-hand-holding-usd"></i>
+                                                        {{ $divisa }}
+                                                        {{ number_format($pagoParcial->monto_pagado ?? 0, 2) }}
+                                                        -
+                                                        {{ $pagoParcial->fecha_pago ? \Carbon\Carbon::parse($pagoParcial->fecha_pago)->format('d/m/Y') : '-' }}
+                                                    </span>
+                                                    @php
+                                                        $total_pago_parcial += $pagoParcial->monto_pagado ?? 0;
+                                                    @endphp
+                                                @endforeach
+                                                <hr>
+                                                <span class="inline-flex items-center gap-1 rounded-full bg-blue-200 text-blue-800 px-2 py-0.5 text-[11px] font-semibold">
+                                                    {{ $divisa }} {{ number_format($total_pago_parcial, 2) }} Total pagado
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </td>
 
                                     <td class="py-3 px-4">
 
@@ -721,8 +753,8 @@
                                                 </div>
                                             </flux:modal>
 
-                                            <flux:modal name="show-pagos_parciales{{ $pago->id }}" variant="primary"
-                                                class="md:w-96">
+                                            <flux:modal name="show-pagos_parciales{{ $pago->id }}"
+                                                variant="primary" class="md:w-96">
 
                                                 <div class="space-y-6">
 
@@ -744,26 +776,28 @@
                                                                 <flux:text
                                                                     class="mt-1 text-sm text-gray-500 dark:text-gray-400">
 
-                                                                    Registra un abono parcial para esta cuota.<br> 
-                                                                    El monto total pagado se actualizará automaticamente al confirmar el pago parcial.
+                                                                    Registra un abono parcial para esta cuota.<br>
+                                                                    El monto total pagado se actualizará automaticamente
+                                                                    al confirmar el pago parcial.
                                                                 </flux:text>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <form action="{{ url('/admin/pago_parcial/create') }}" method="POST">
+                                                    <form action="{{ url('/admin/pago_parcial/create') }}"
+                                                        method="POST">
 
                                                         @csrf
 
                                                         <input type="hidden" name="pago_id"
                                                             value="{{ $pago->id }}" />
-                                                            <input type="hidden" name="monto_total_de_la_cuota" value="{{ $montoTotalPagadoValue }}" required/>
+                                                        <input type="hidden" name="monto_total_de_la_cuota"
+                                                            value="{{ $montoTotalPagadoValue }}" required />
 
                                                         <flux:field>
                                                             <flux:label>Monto pagado (parcial)</flux:label>
                                                             <flux:input type="text" name="monto_pagado"
-                                                                value="{{ old('monto_pagado') }}"
-                                                                required />
+                                                                value="{{ old('monto_pagado') }}" required />
 
                                                             <flux:error name="monto_pagado" />
                                                         </flux:field>
