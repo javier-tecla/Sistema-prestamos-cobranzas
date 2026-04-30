@@ -560,8 +560,10 @@
                                                     @endphp
                                                 @endforeach
                                                 <hr>
-                                                <span class="inline-flex items-center gap-1 rounded-full bg-blue-200 text-blue-800 px-2 py-0.5 text-[11px] font-semibold">
-                                                    {{ $divisa }} {{ number_format($total_pago_parcial, 2) }} Total pagado
+                                                <span
+                                                    class="inline-flex items-center gap-1 rounded-full bg-blue-200 text-blue-800 px-2 py-0.5 text-[11px] font-semibold">
+                                                    {{ $divisa }} {{ number_format($total_pago_parcial, 2) }}
+                                                    Total pagado
                                                 </span>
                                             @endif
                                         </div>
@@ -775,7 +777,6 @@
                                                                     {{ $pago->referencia_pago }}</flux:heading>
                                                                 <flux:text
                                                                     class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-
                                                                     Registra un abono parcial para esta cuota.<br>
                                                                     El monto total pagado se actualizará automaticamente
                                                                     al confirmar el pago parcial.
@@ -783,6 +784,96 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div
+                                                        class="p-4 rounded-lg bg-slate-50 dark:bg-neutral-900/40 border-slate-200 dark:border-slate-700">
+
+                                                        @if ($pago->pagosParciales->isNotEmpty())
+                                                            <div class="flex items-center justify-between mb-2">
+                                                                <p class="text-xs font-semibold text-blue-700">Pagos
+                                                                    parciales</p>
+                                                                <span
+                                                                    class="inline-fle item-center round-full bg-blue-100 px-2 py-0.5 font-semibold text-blue-700 text-xs">
+                                                                    {{ $pago->pagosParciales->count() }} registrado(s)
+                                                                </span>
+                                                            </div>
+                                                            @php
+                                                                $total_pago_parcial = 0;
+                                                            @endphp
+                                                            @foreach ($pago->pagosParciales as $pagoParcial)
+                                                                <span class="text-xs">
+                                                                    <i class="fas fa-hand-holding-usd"></i>
+                                                                    {{ $divisa }}
+                                                                    {{ number_format($pagoParcial->monto_pagado ?? 0, 2) }}
+                                                                    -
+                                                                    {{ $pagoParcial->fecha_pago ? \Carbon\Carbon::parse($pagoParcial->fecha_pago)->format('d/m/Y') : '-' }}
+                                                                </span>
+                                                                <br>
+                                                                @php
+                                                                    $total_pago_parcial +=
+                                                                        $pagoParcial->monto_pagado ?? 0;
+                                                                @endphp
+                                                            @endforeach
+                                                            <br>
+                                                            <span
+                                                                class="inline-flex items-center gap-1 rounded-full bg-blue-200 text-blue-800 px-2 py-0.5 text-[11px] font-semibold">
+                                                                {{ $divisa }}
+                                                                {{ number_format($total_pago_parcial, 2) }} Total
+                                                                pagado
+                                                            </span>
+                                                        @else
+                                                            <div class="flex items-center justify-between mb-2">
+                                                                <p class="text-xs font-semibold text-blue-700">Sin
+                                                                    pagos parciales</p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    @if ($moraAplicada > 0)
+                                                        <div
+                                                            class="p-4 rounded-lg bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
+                                                            <p
+                                                                class="text-xs uppercase text-rose-700 dark:text-rose-300">
+                                                                Mora
+                                                                aplicada</p>
+                                                            <p
+                                                                class="text-base font-semibold text-gray-900 dark:text-white">
+                                                                {{ $divisa }}
+                                                                {{ number_format($moraAplicada, 2) }}</p>
+                                                        </div>
+                                                    @endif
+                                                    <div
+                                                        class="p-4 rounded-lg bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
+                                                        <p class="text-xs uppercase text-rose-700 dark:text-rose-300">
+                                                            Monto de la cuota</p>
+                                                        <p
+                                                            class="text-base font-semibold text-gray-900 dark:text-white">
+                                                            {{ $divisa }}
+                                                            {{ number_format($pago->monto_cuota, 2) }}</p>
+                                                    </div>
+
+                                                    <div
+                                                        class="p-4 rounded-lg bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
+                                                        <flux:field>
+                                                            <flux:label
+                                                                class="text-xs uppercase text-rose-700 dark:text-rose-300">
+                                                                MONTO TOTAL A PAGAR @if ($moraAplicada > 0)
+                                                                    (incluye mora)
+                                                                @endif
+                                                            </flux:label>
+
+                                                            <p
+                                                                class="text-base font-semibold text-gray-900 dark:text-white">
+                                                                {{ $divisa }}
+                                                                {{ number_format($montoTotalPagadoValue, 2) }}
+                                                            </p>
+                                                        </flux:field>
+                                                    </div>
+
+                                                    @php
+                                                        $saldo_de_la_cuota = $montoTotalPagadoValue - ($total_pago_parcial ?? 0);
+                                                    @endphp
+
 
                                                     <form action="{{ url('/admin/pago_parcial/create') }}"
                                                         method="POST">
@@ -797,7 +888,7 @@
                                                         <flux:field>
                                                             <flux:label>Monto pagado (parcial)</flux:label>
                                                             <flux:input type="text" name="monto_pagado"
-                                                                value="{{ old('monto_pagado') }}" required />
+                                                                value="{{ old('monto_pagado', $saldo_de_la_cuota) }}" required />
 
                                                             <flux:error name="monto_pagado" />
                                                         </flux:field>
@@ -865,7 +956,8 @@
                                                                         <flux:heading size="lg">Comprobante de
                                                                             Pago
 
-                                                                            {{ $pago->referencia_pago }}</flux:heading>
+                                                                            {{ $pago->referencia_pago }}
+                                                                        </flux:heading>
 
                                                                     </div>
 

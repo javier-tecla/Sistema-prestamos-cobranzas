@@ -15,8 +15,8 @@ class PagoParcialController extends Controller
         // ], 201);
         $request->validate([
             'pago_id' => 'required|exists:pagos,id',
-            'monto_total_de_la_cuota' => 'required',
-            'monto_pagado' => 'required',
+            'monto_total_de_la_cuota' => 'required|numeric',
+            'monto_pagado' => 'required|numeric',
             'fecha_pago' => 'required|date',
             'detalle_pago' => 'nullable|string|max:255',
         ]);
@@ -28,6 +28,13 @@ class PagoParcialController extends Controller
         $pagoParcial->fecha_pago = $request->input('fecha_pago');
         $pagoParcial->detalle_pago = $request->input('detalle_pago');
         $pagoParcial->save();
+
+        $total_pagado = PagoParcial::where('pago_id', $request->input('pago_id'))->sum('monto_pagado');
+        if ($total_pagado >= $request->input('monto_total_de_la_cuota')) {
+            $pago = $pagoParcial->pago;
+            $pago->estado = 'pagado';
+            $pago->save();
+        }
 
         return redirect()->back()
             ->with('mensaje', 'Pago parcial registrado exitosamente')
