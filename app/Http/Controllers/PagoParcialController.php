@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pago;
 use App\Models\PagoParcial;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class PagoParcialController extends Controller
             'detalle_pago' => 'nullable|string|max:255',
         ]);
 
-        $pagoParcial = new PagoParcial();
+        $pagoParcial = new PagoParcial;
         $pagoParcial->pago_id = $request->input('pago_id');
         $pagoParcial->monto_total_de_la_cuota = $request->input('monto_total_de_la_cuota');
         $pagoParcial->monto_pagado = $request->input('monto_pagado');
@@ -31,9 +32,20 @@ class PagoParcialController extends Controller
 
         $total_pagado = PagoParcial::where('pago_id', $request->input('pago_id'))->sum('monto_pagado');
         if ($total_pagado >= $request->input('monto_total_de_la_cuota')) {
-            $pago = $pagoParcial->pago;
+            $pago = Pago::findOrFail($request->pago_id);
+            $pago->metodo_pago = "Pago parcial";
+            $pago->fecha_cancelado = $request->fecha_pago;
+            $pago->monto_total_pagado = $request->monto_total_de_la_cuota;
             $pago->estado = 'pagado';
             $pago->save();
+
+            $cuotasPendientes = $pago->prestamo->pagos->where('estado', 'pendiente')->count();
+
+            if ($cuotasPendientes == 0) {
+                $prestamo = $pago->prestamo;
+                $prestamo->estado = 'pagado';
+                $prestamo->save();
+            }
         }
 
         return redirect()->back()

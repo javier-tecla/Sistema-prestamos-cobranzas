@@ -125,7 +125,7 @@
     <!-- Datos del cliente -->
     <div style="text-align: left;">
         <strong>DATOS DEL CLIENTE:</strong><br><br>
-        <b>Documento: </b> {{ $cliente->tipo_documento .' ' . $cliente->numero_documento }}<br>
+        <b>Documento: </b> {{ $cliente->tipo_documento . ' ' . $cliente->numero_documento }}<br>
         <b>Señor(es): </b> {{ $cliente->apellidos . ' ' . $cliente->nombres }}<br>
         <b>Celular: </b> {{ $cliente->celular }}<br>
     </div>
@@ -137,31 +137,43 @@
         <strong>DATOS DE LA CUOTA:</strong><br><br>
         <b>Número de cuota: </b> {{ $pago->referencia_pago }}<br>
         <b>Fecha programada: </b> {{ $fecha_pago_programado }}<br>
-        <b>Monto de la cuota: </b> {{ $ajuste->divisa . ' ' . number_format($pago->monto_cuota, 2, '-', ',') }}<br>
+        <b>Monto de la cuota: </b> {{ $ajuste->divisa . ' ' . number_format($pago->monto_cuota, 2, '.', ',') }}<br>
         <div style="height: 10px"></div>
+
+        <!-- Datos del pago parcial -->
+        @if ($pago->metodo_pago === 'Pago parcial')
         <br><br>
+        <strong>PAGOS PARCIALES REALIZADOS:</strong><br><br>
+        @foreach ($pago->pagosParciales as $pago_parcial)
+        <b>Fecha pago parcial: </b> {{ \Carbon\Carbon::parse($pago_parcial->fecha_pago)->format('d/m/Y') }}<br>
+        <b>Monto pagado: </b>
+            {{ $ajuste->divisa . ' ' . number_format($pago_parcial->monto_pagado, 2, '.', ',') }}<br>
+            <div style="height: 10px"></div>
+        @endforeach
+            <div style="height: 10px"></div>
+        @endif
 
         <!-- Datos del pago -->
         <strong>DATOS DEL PAGO:</strong><br><br>
         <b>Fecha cancelado: </b>{{ $fecha_cancelado }}<br>
         <b>Metodo de pago: </b>{{ $pago->metodo_pago }}<br>
-        
+
         @php
 
-        $montoCuota = $pago->monto_cuota;
-        $monto_total_pagado = $pago->monto_total_pagado;
-        if ($monto_total_pagado !== $montoCuota) {
-            $tieneMora = true;
-        }else{
-            $tieneMora = false;
-        }
-        
+            $montoCuota = $pago->monto_cuota;
+            $monto_total_pagado = $pago->monto_total_pagado;
+            if ($monto_total_pagado !== $montoCuota) {
+                $tieneMora = true;
+            } else {
+                $tieneMora = false;
+            }
+
         @endphp
 
         @if ($tieneMora)
             <b>MORA:</b>
-        {{ $ajuste->divisa . ' ' . number_format($monto_total_pagado - $montoCuota, 2, ',', ',') }}
-        <br>
+            {{ $ajuste->divisa . ' ' . number_format($monto_total_pagado - $montoCuota, 2, ',', ',') }}
+            <br>
         @endif
 
         <div style="height: 5px"></div>
@@ -176,7 +188,8 @@
             <b>GRACIAS POR SU PREFERENCIA</b><br>
             <small>
                 Atendido por el Usuario: {{ Auth::user()->name }} <br>
-                Impreso en: Fecha y Hora: {{ \Carbon\Carbon::now()->timezone('-04:00')->format('d/m/Y H:i') }}<br><br>
+                Impreso en: Fecha y Hora:
+                {{ \Carbon\Carbon::now()->timezone('-04:00')->format('d/m/Y H:i') }}<br><br>
             </small>
 
         </div>

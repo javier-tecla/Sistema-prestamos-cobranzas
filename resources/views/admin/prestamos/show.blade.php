@@ -291,7 +291,12 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div id="pagos-scroll-top" class="overflow-x-auto border-b border-gray-100 dark:border-gray-700">
+                    <div id="pagos-scroll-top-content" style="height: 1px; width: 1850px;"></div>
+
+                </div>
+
+                <div class="overflow-x-auto" id="pagos-scroll-bottom">
                     <table class="min-w-full text-sm text-gray-700 dark:text-gray-200">
                         <thead class="bg-gray-50 dark:bg-neutral-900 sticky top-0 z-10">
                             <tr class="text-left text-xs uppercase tracking-wide text-gray-500">
@@ -305,7 +310,7 @@
                                 <th class="py-3 px-4">Método</th>
                                 <th class="py-3 px-4">Fecha cancelado</th>
                                 <th class="py-3 px-4">Total pagado</th>
-                                <th class="py-3 px-4">Estado de la cuota</th>
+                                <th class="py-3 px-4" style="min-width: 200px; width:200px">Estado de la cuota</th>
                                 <th class="py-3 px-4">Pagos parciales</th>
                                 <th class="py-3 px-4">Estado</th>
                                 <th class="py-3 px-4">Acciones</th>
@@ -329,7 +334,9 @@
                                         $estadoPago === 'pendiente' &&
                                         $pago->fecha_vencimiento &&
                                         \Carbon\Carbon::parse($pago->fecha_vencimiento)->lt($hoy);
-                                @endphp
+                                        $total_pago_parcial = 0;
+                                        $total_pago_parcial = $pago->pagosParciales->sum('monto_pagado')
+;                                @endphp
                                 <tr class="hover:bg-gray-50 dark:hover:bg-neutral-700/40"
                                     style="background-color: {{ $estadoPago === 'pagado' ? '#dcfce7' : ($vencido ? '#ffe4e6' : ($loop->odd ? '#f3f4f6' : '#ffffff')) }};">
 
@@ -356,39 +363,25 @@
                                     </td>
                                     <td class="py-3 px-4">{{ $divisa }}
                                         {{ number_format($pago->monto_total_pagado ?? 0, 2) }}</td>
-                                    <td>
+                                    <td class="py-3 px-4" style="min-width: 200px; width:200px">
                                         @php
 
                                             $diasGracia = $ajuste->dias_gracia ?? 0;
-
                                             $tasaMoraDiaria = ($ajuste->mora ?? 0) / 100;
-
                                             $diasNotificacion = $ajuste->dias_notificacion ?? 0;
-
                                             $fechaActual = \Carbon\Carbon::now()->startOfDay();
-
                                             $fechaVencimiento = $pago->fecha_vencimiento
                                                 ? \Carbon\Carbon::parse($pago->fecha_vencimiento)->startOfDay()
                                                 : null;
-
                                             $diasAtraso = 0;
-
                                             $diasParaVencer = 0;
-
                                             $diasEnGracia = 0;
-
                                             $diasDesdeVencimiento = 0;
-
                                             $estaAtrasado = false;
-
                                             $proximoAVencer = false;
-
                                             $enPeriodoGracia = false;
-
                                             $montoMora = 0;
-
                                             $diasRestantesGracia = 0;
-
                                             $diaOrdinalGracia = '';
 
                                             if ($pago->estado === 'pendiente' && $fechaVencimiento) {
@@ -431,7 +424,6 @@
                                         @endphp
 
                                         <div class="flex flex-col gap-1 text-xs">
-
                                             @if (!$fechaVencimiento)
                                                 <span class="text-gray-500">Sin vencimiento</span>
                                             @elseif ($pago->estado !== 'pendiente')
@@ -797,9 +789,7 @@
                                                                     {{ $pago->pagosParciales->count() }} registrado(s)
                                                                 </span>
                                                             </div>
-                                                            @php
-                                                                $total_pago_parcial = 0;
-                                                            @endphp
+                                                            
                                                             @foreach ($pago->pagosParciales as $pagoParcial)
                                                                 <span class="text-xs">
                                                                     <i class="fas fa-hand-holding-usd"></i>
@@ -809,10 +799,7 @@
                                                                     {{ $pagoParcial->fecha_pago ? \Carbon\Carbon::parse($pagoParcial->fecha_pago)->format('d/m/Y') : '-' }}
                                                                 </span>
                                                                 <br>
-                                                                @php
-                                                                    $total_pago_parcial +=
-                                                                        $pagoParcial->monto_pagado ?? 0;
-                                                                @endphp
+                                                               
                                                             @endforeach
                                                             <br>
                                                             <span
@@ -1033,5 +1020,41 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const topScroll = document.getElementById('pagos-scroll-top');
+            const topContent = document.getElementById('pagos-scroll-top-content');
+            const bottomScroll = document.getElementById('pagos-scroll-bottom');
+            const table = bottomScroll ? bottomScroll.querySelector('table') : null;
+
+            if (!topScroll || !topContent || !bottomScroll || !table) {
+                return;
+            }
+
+            const syncTopWidth = () => {
+                topContent.style.width = `${table.scrollWidth}px`;
+            };
+
+            let syncing = false;
+
+            topScroll.addEventListener('scroll', function() {
+                if (syncing) return;
+                syncing = true;
+                bottomScroll.scrollLeft = topScroll.scrollLeft;
+                syncing = false;
+            });
+
+            bottomScroll.addEventListener('scroll', function() {
+                if (syncing) return;
+                syncing = true;
+                topScroll.scrollLeft = bottomScroll.scrollLeft;
+                syncing = false;
+            });
+
+            syncTopWidth();
+            window.addEventListener('resize', syncTopWidth);
+        });
+    </script>
 
 </x-layouts::app>
