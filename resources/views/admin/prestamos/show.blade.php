@@ -334,9 +334,8 @@
                                         $estadoPago === 'pendiente' &&
                                         $pago->fecha_vencimiento &&
                                         \Carbon\Carbon::parse($pago->fecha_vencimiento)->lt($hoy);
-                                        $total_pago_parcial = 0;
-                                        $total_pago_parcial = $pago->pagosParciales->sum('monto_pagado')
-;                                @endphp
+                                    $total_pago_parcial = 0;
+                                $total_pago_parcial = $pago->pagosParciales->sum('monto_pagado'); @endphp
                                 <tr class="hover:bg-gray-50 dark:hover:bg-neutral-700/40"
                                     style="background-color: {{ $estadoPago === 'pagado' ? '#dcfce7' : ($vencido ? '#ffe4e6' : ($loop->odd ? '#f3f4f6' : '#ffffff')) }};">
 
@@ -576,14 +575,16 @@
 
                                         @if ($estadoPago === 'pendiente')
                                             <flux:button.group>
-                                                <flux:modal.trigger name="show-pagos{{ $pago->id }}"
-                                                    variant="primary" data-open-modal>
+                                                @if (!$pago->pagosParciales->isNotEmpty())
+                                                    <flux:modal.trigger name="show-pagos{{ $pago->id }}"
+                                                        variant="primary" data-open-modal>
 
-                                                    <flux:button variant="primary" class="cursor-pointer p-1"
-                                                        color="green" icon="currency-dollar"
-                                                        title="Ver detalles del pago">
-                                                        Pagar</flux:button>
-                                                </flux:modal.trigger>
+                                                        <flux:button variant="primary" class="cursor-pointer p-1"
+                                                            color="green" icon="currency-dollar"
+                                                            title="Ver detalles del pago">
+                                                            Pagar</flux:button>
+                                                    </flux:modal.trigger>
+                                                @endif
 
                                                 <flux:modal.trigger name="show-pagos_parciales{{ $pago->id }}"
                                                     variant="primary" data-open-modal>
@@ -789,7 +790,7 @@
                                                                     {{ $pago->pagosParciales->count() }} registrado(s)
                                                                 </span>
                                                             </div>
-                                                            
+
                                                             @foreach ($pago->pagosParciales as $pagoParcial)
                                                                 <span class="text-xs">
                                                                     <i class="fas fa-hand-holding-usd"></i>
@@ -799,7 +800,6 @@
                                                                     {{ $pagoParcial->fecha_pago ? \Carbon\Carbon::parse($pagoParcial->fecha_pago)->format('d/m/Y') : '-' }}
                                                                 </span>
                                                                 <br>
-                                                               
                                                             @endforeach
                                                             <br>
                                                             <span
@@ -858,7 +858,8 @@
                                                     </div>
 
                                                     @php
-                                                        $saldo_de_la_cuota = $montoTotalPagadoValue - ($total_pago_parcial ?? 0);
+                                                        $saldo_de_la_cuota =
+                                                            $montoTotalPagadoValue - ($total_pago_parcial ?? 0);
                                                     @endphp
 
 
@@ -874,8 +875,11 @@
 
                                                         <flux:field>
                                                             <flux:label>Monto pagado (parcial)</flux:label>
-                                                            <flux:input type="text" name="monto_pagado"
-                                                                value="{{ old('monto_pagado', $saldo_de_la_cuota) }}" required />
+                                                            <flux:input type="number" step="0.01" min="0.01"
+                                                                max="{{ number_format(max($saldo_de_la_cuota, 0), 2, '.', '') }}"
+                                                                name="monto_pagado"
+                                                                value="{{ old('monto_pagado', $saldo_de_la_cuota) }}"
+                                                                required />
 
                                                             <flux:error name="monto_pagado" />
                                                         </flux:field>

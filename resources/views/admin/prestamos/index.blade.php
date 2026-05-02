@@ -81,6 +81,10 @@
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Nro de cuotas</th>
+
+                    <th
+                        class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Cuotas pagadas</th>
                     <th
                         class="px-6 py-3 border-x border-b border-gray-200 dark:border-zinc-700 text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Cuotas pendientes</th>
@@ -97,6 +101,9 @@
                     $nro = ($prestamos->currentPage() - 1) * $prestamos->perPage() + 1;
                 @endphp
                 @foreach ($prestamos as $prestamo)
+                    @php
+                        $cuotasPagadas = $prestamo->pagos->where('estado', 'pagado')->count();
+                    @endphp
                     <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700/50 transition">
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
@@ -132,12 +139,17 @@
 
                         <td
                             class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
+                            {{ $cuotasPagadas }}</td>
+
+                        <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 text-center">
                             @php
                                 echo $cuotasPendientes = $prestamo->pagos->where('estado', 'pendiente')->count();
                             @endphp
                         </td>
 
-                        <td class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-center">
+                        <td
+                            class="px-3 py-2 border border-gray-200 dark:border-zinc-700 whitespace-nowrap text-sm text-center">
                             @if ($prestamo->estado == 'pendiente')
                                 <span
                                     class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/20">
@@ -165,24 +177,26 @@
 
                                 <a href="{{ url('/admin/prestamo/' . $prestamo->id) }}"
                                     class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-eye mr-2"></i> Ver
+                                    <i class="fas fa-eye mr-2"></i> Ver pagos
                                 </a>
 
-                                <a href="{{ url('/admin/prestamo/' . $prestamo->id . '/edit') }}"
-                                    class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
-                                    <i class="fas fa-pencil-alt mr-2"></i> Editar
-                                </a>
+                                @if (!$cuotasPagadas > 0)
+                                    <a href="{{ url('/admin/prestamo/' . $prestamo->id . '/edit') }}"
+                                        class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded transition">
+                                        <i class="fas fa-pencil-alt mr-2"></i> Editar
+                                    </a>
 
-                                <form action="{{ url('/admin/prestamo/' . $prestamo->id) }}" method="post"
-                                    id="miFormulario{{ $prestamo->id }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
-                                        onclick="preguntar{{ $prestamo->id }}(event)">
-                                        <i class="fas fa-trash-alt mr-2"></i> Eliminar
-                                    </button>
-                                </form>
+                                    <form action="{{ url('/admin/prestamo/' . $prestamo->id) }}" method="post"
+                                        id="miFormulario{{ $prestamo->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded transition"
+                                            onclick="preguntar{{ $prestamo->id }}(event)">
+                                            <i class="fas fa-trash-alt mr-2"></i> Eliminar
+                                        </button>
+                                    </form>
+                                @endif
 
                                 <script>
                                     function preguntar{{ $prestamo->id }}(event) {

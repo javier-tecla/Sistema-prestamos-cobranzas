@@ -152,6 +152,15 @@ class PagoController extends Controller
         $pago->estado = 'pendiente';
         $pago->save();
 
+        $pago->pagosParciales()->delete();
+
+        $cuotasPendientes = $pago->prestamo->pagos->where('estado', 'pendiente')->count();
+        if ($cuotasPendientes > 0) {
+            $prestamo = $pago->prestamo;
+            $prestamo->estado = 'pendiente';
+            $prestamo->save();
+        }
+
         return redirect()->route('admin.prestamos.show', $pago->prestamo_id)
             ->with('mensaje', 'Pago borrado exitosamente')
             ->with('icono', 'success');
