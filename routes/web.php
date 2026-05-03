@@ -97,6 +97,7 @@ Route::get('/admin/notificacion/{cliente}/whatsapp', [App\Http\Controllers\Notif
 
 //rutas para pagos parciales
 Route::post('/admin/pago_parcial/create', [App\Http\Controllers\PagoParcialController::class, 'store'])->name('admin.pago_parcials.store')->middleware('auth', 'can:Guardar pago parcial');
+Route::delete('/admin/pago_parcial/{id}', [App\Http\Controllers\PagoParcialController::class, 'destroy'])->name('admin.pago_parcials.destroy')->middleware('auth', 'can:Eliminar pago parcial');
 
 //rutas para backups
 Route::get('/admin/backups', [App\Http\Controllers\BackupController::class, 'index'])->name('admin.backups.index')->middleware('auth', 'can:Ver listado de backups');

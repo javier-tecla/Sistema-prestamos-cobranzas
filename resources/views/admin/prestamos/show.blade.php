@@ -536,6 +536,32 @@
                                                 <hr>
                                                 @php
                                                     $total_pago_parcial = 0;
+
+                                                    $moraAplicada = $montoMora ?? 0;
+
+                                                    $montoBaseCuota = $pago->monto_cuota ?? 0;
+
+                                                    $montoTotalSugerido = $montoBaseCuota + $moraAplicada;
+
+                                                    $montoTotalPagadoOld = old('monto_total_pagado');
+
+                                                    $montoTotalPagadoValue =
+                                                        $montoTotalPagadoOld !== null
+                                                            ? str_replace(
+                                                                ',',
+                                                                '.',
+                                                                preg_replace(
+                                                                    '/[^\d,.-]/',
+                                                                    '',
+                                                                    (string) $montoTotalPagadoOld,
+                                                                ),
+                                                            )
+                                                            : number_format(
+                                                                (float) ($montoTotalSugerido ?? 0),
+                                                                2,
+                                                                '.',
+                                                                '',
+                                                            );
                                                 @endphp
                                                 @foreach ($pago->pagosParciales as $pagoParcial)
                                                     <span
@@ -545,6 +571,21 @@
                                                         {{ number_format($pagoParcial->monto_pagado ?? 0, 2) }}
                                                         -
                                                         {{ $pagoParcial->fecha_pago ? \Carbon\Carbon::parse($pagoParcial->fecha_pago)->format('d/m/Y') : '-' }}
+                                                        <form
+                                                            action="{{ url('/admin/pago_parcial', $pagoParcial->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('¿Confirma que desea eliminar este pago parcial?');"
+                                                            class="inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <input type="text" value="{{ $montoTotalPagadoValue }}" name="monto_total_pagado" hidden>
+                                                            <button type="submit"
+                                                                class="text-red-500 hover:text-red-700 ml-2">
+                                                                <i class="fas fa-trash-alt"
+                                                                    style="cursor: pointer"></i>
+                                                            </button>
+
+                                                        </form>
                                                     </span>
                                                     @php
                                                         $total_pago_parcial += $pagoParcial->monto_pagado ?? 0;
