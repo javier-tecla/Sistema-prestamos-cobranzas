@@ -7,9 +7,10 @@ use App\Models\Categoria;
 use App\Models\Cliente;
 use App\Models\Pago;
 use App\Models\Prestamo;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class PrestamoController extends Controller
 {
@@ -48,7 +49,6 @@ class PrestamoController extends Controller
         $totalInteres = $pagos->sum('monto_interes');
         $totalCuotas = $pagos->sum('monto_cuota');
 
-
         $pdf = Pdf::loadView('admin.prestamos.contrato', compact('prestamo', 'ajuste', 'cliente', 'pagos', 'totalCapital', 'totalInteres', 'totalCuotas'));
         $pdf->setOption([
             'dpi' => 120,
@@ -56,8 +56,9 @@ class PrestamoController extends Controller
             'isRemoteEnabled' => true,
             'defaultFont' => 'Arial Narrow',
         ]);
-         $pdf->setPaper('letter', 'portrait');
-        return $pdf->stream('contrato_prestamo_' . $prestamo->id . '.pdf');
+        $pdf->setPaper('letter', 'portrait');
+
+        return $pdf->stream('contrato_prestamo_'.$prestamo->id.'.pdf');
     }
 
     /**
@@ -142,8 +143,29 @@ class PrestamoController extends Controller
         // echo 'Mostrando detalles del prestamo con ID:' . $id;
         $prestamo = Prestamo::with('cliente', 'categoria', 'pagos')->findOrFail($id);
 
+        $liquidacion = $this->calcularLiquidacion($prestamo, $ajuste);
+
         // return response()->json($prestamo);
+        // return response()->json($liquidacion);
         return view('admin.prestamos.show', compact('prestamo', 'ajuste'));
+    }
+
+    public function calcularLiquidacion(Prestamo $prestamo, Ajuste $ajuste)
+    {
+        $hoy = Carbon::today();
+
+        $pagosPendientes = $prestamo->pagos->where('estado', 'pendiente')->sortBy('fecha_vencimiento');
+
+        $cuotaActual = $pagosPendientes->first();
+        $totalCapitalRestante = $cuotaActual ? ($cuotaActual->saldo_capital ?? $pagosPendientes->sum('monto_capital')) : 0;
+        $totalCuotasRestantes = $pagosPendientes->sum('monto_cuota');
+
+        return [
+            'cuota_actual' => $cuotaActual,
+            'total_capital_restante' => $totalCapitalRestante,
+            'total_cuotas_restantes' => $totalCuotasRestantes,
+        ];
+
     }
 
     /**
@@ -196,7 +218,7 @@ class PrestamoController extends Controller
             // No se actualiza el estado aquí, se mantiene el mismo
             $prestamo->save();
 
-            //Aquí agregar logica para actualizar los pagos asociados si es necesario
+            // Aquí agregar logica para actualizar los pagos asociados si es necesario
             $prestamo->pagos()->delete(); // Eliminar los pagos existentes
 
             $numero_cuota = 1;
@@ -206,7 +228,7 @@ class PrestamoController extends Controller
             }
 
             foreach ($cuotas as $cuota) {
-                $pago = new Pago();
+                $pago = new Pago;
                 $pago->prestamo_id = $prestamo->id;
                 $pago->fecha_vencimiento = $cuota['fecha_vencimiento'];
                 $pago->saldo_capital = $cuota['saldo_capital'];
@@ -226,8 +248,9 @@ class PrestamoController extends Controller
                 ->with('icono', 'success');
         } catch (\Exception $e) {
             DB::rollBack();
+
             return redirect()->back()
-                ->with('mensaje', 'Error al actualizar el préstamo: ' . $e->getMessage())
+                ->with('mensaje', 'Error al actualizar el préstamo: '.$e->getMessage())
                 ->with('icono', 'error');
         }
     }
@@ -241,12 +264,13 @@ class PrestamoController extends Controller
         try {
             $prestamo = Prestamo::findOrFail($id);
             $prestamo->delete();
+
             return redirect()->route('admin.prestamos.index')
                 ->with('mensaje', 'Préstamo eliminado exitosamente')
                 ->with('icono', 'success');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('mensaje', 'Error al eliminar el préstamo: ' . $e->getMessage())
+                ->with('mensaje', 'Error al eliminar el préstamo: '.$e->getMessage())
                 ->with('icono', 'error');
         }
     }
