@@ -146,8 +146,8 @@ class PrestamoController extends Controller
         $liquidacion = $this->calcularLiquidacion($prestamo, $ajuste);
 
         // return response()->json($prestamo);
-        // return response()->json($liquidacion);
-        return view('admin.prestamos.show', compact('prestamo', 'ajuste'));
+        return response()->json([$liquidacion]);
+        // return view('admin.prestamos.show', compact('prestamo', 'ajuste'));
     }
 
     public function calcularLiquidacion(Prestamo $prestamo, Ajuste $ajuste)
@@ -160,10 +160,42 @@ class PrestamoController extends Controller
         $totalCapitalRestante = $cuotaActual ? ($cuotaActual->saldo_capital ?? $pagosPendientes->sum('monto_capital')) : 0;
         $totalCuotasRestantes = $pagosPendientes->sum('monto_cuota');
 
+        // Inicializamos variables para el cálculo
+        $interesDevengado = 0;
+        $diasDevengados = 0;
+        $diasMora = 0;
+        $moraDevengada = 0;
+
+        if ($cuotaActual) {
+            $fechaVencimiento = $cuotaActual->fecha_vencimiento ? Carbon::parse($cuotaActual->fecha_vencimiento)->startOfDay() : null;
+            $montoInteresCuota = $cuotaActual->monto_interes ?? 0;
+
+            $ultimoPagoPagado = $prestamo->pagos->where('estado', 'pagado')->sortByDesc('fecha_vencimiento')->first();
+            $periodoInicio = $ultimoPagoPagado && $ultimoPagoPagado->fecha_vencimiento ? Carbon::parse($ultimoPagoPagado->fecha_vencimiento)->startOfDay() : Carbon::parse($prestamo->fecha_inicio)->startOfDay();
+
+            // Caso 1: cuota vencida
+            if ($fechaVencimiento && $fechaVencimiento->lt($hoy)) {
+                $interesDevengado = $montoInteresCuota;
+
+                // dias transcurridos desde el vencimiento
+                $diasDevengados = $fechaVencimiento->diffInDays($hoy);
+
+                // dias de mora luego de descontar los dias de gracia
+                $diasMora = max(0, $diasDevengados - $ajuste->dias_gracia);
+            }
+
+             // Caso 2: cuota no vencida aun
+
+        }
+
         return [
             'cuota_actual' => $cuotaActual,
             'total_capital_restante' => $totalCapitalRestante,
             'total_cuotas_restantes' => $totalCuotasRestantes,
+            'fechaVencimiento' => $fechaVencimiento ?? null,
+            'montoInteresCuota' => $montoInteresCuota ?? 0,
+            'ultimoPagoPagado' => $ultimoPagoPagado ?? null,
+            'periodoInicio' => $periodoInicio ?? null,
         ];
 
     }
