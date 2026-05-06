@@ -288,8 +288,42 @@
                             <p class="text-sm text-gray-500">Registro completo de todas las cuotas.</p>
                         </div>
                         <div class="text-xs text-gray-400">{{ $pagos->count() }} pagos</div>
+                        @if (($liquidacion['total_liquidacion'] ?? 0) > 0 && strtolower($prestamo->estado ?? 'pendiente') === 'pendiente')
+                            <flux:modal.trigger name="liquidar-prestamo" variant="danger" data-open-modal>
+                                <flux:button variant="danger" class="cursor-pointer p-1" color="red"
+                                    tittle="Liquidar préstamo">
+                                    <i class="fas fa-hand-holding-usd mr-2"></i>
+                                    Liquidar préstamo
+                                </flux:button>
+                            </flux:modal.trigger>
+                        @endif
                     </div>
                 </div>
+
+                <flux:modal name="liquidar-prestamo" variant="danger" class="md:w-96">
+
+                    <div class="space-y-6">
+
+                        <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+
+                            <div class="flex items-center gap-3 mb-2">
+
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+
+                                    <i class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+
+                                </div>
+                                <div>
+                                    <flux:heading size="lg">Liquidar préstamo</flux:heading>
+                                    <flux:text class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+
+                                        Al liquidar el préstamo se cancela todas las cuotas pendientes.
+                                    </flux:text>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </flux:modal>
 
                 <div id="pagos-scroll-top" class="overflow-x-auto border-b border-gray-100 dark:border-gray-700">
                     <div id="pagos-scroll-top-content" style="height: 1px; width: 1850px;"></div>
@@ -578,7 +612,9 @@
                                                             class="inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <input type="text" value="{{ $montoTotalPagadoValue }}" name="monto_total_pagado" hidden>
+                                                            <input type="text"
+                                                                value="{{ $montoTotalPagadoValue }}"
+                                                                name="monto_total_pagado" hidden>
                                                             <button type="submit"
                                                                 class="text-red-500 hover:text-red-700 ml-2">
                                                                 <i class="fas fa-trash-alt"

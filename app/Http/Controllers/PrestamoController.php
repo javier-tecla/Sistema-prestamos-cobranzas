@@ -146,8 +146,8 @@ class PrestamoController extends Controller
         $liquidacion = $this->calcularLiquidacion($prestamo, $ajuste);
 
         // return response()->json($prestamo);
-        return response()->json([$liquidacion]);
-        // return view('admin.prestamos.show', compact('prestamo', 'ajuste'));
+        // return response()->json([$liquidacion]);
+        return view('admin.prestamos.show', compact('prestamo', 'ajuste', 'liquidacion'));
     }
 
     public function calcularLiquidacion(Prestamo $prestamo, Ajuste $ajuste)
@@ -165,6 +165,7 @@ class PrestamoController extends Controller
         $diasDevengados = 0;
         $diasMora = 0;
         $moraDevengada = 0;
+        // $tasaMoraDiaria = $ajuste->mora / 100; // Definida afuera por seguridad
 
         if ($cuotaActual) {
             $fechaVencimiento = $cuotaActual->fecha_vencimiento ? Carbon::parse($cuotaActual->fecha_vencimiento)->startOfDay() : null;
@@ -184,18 +185,39 @@ class PrestamoController extends Controller
                 $diasMora = max(0, $diasDevengados - $ajuste->dias_gracia);
             }
 
-             // Caso 2: cuota no vencida aun
+            // Caso 2: cuota no vencida aun
+            if ($fechaVencimiento && $periodoInicio && $fechaVencimiento->gte($hoy)) {
+                $periodoLength = max(1, $periodoInicio->diffInDays($fechaVencimiento)); // Evitar division por cero
+                $diasTranscurridos = max(0, $periodoInicio->diffInDays($hoy));
+                $diasDevengados = min($periodoLength, $diasTranscurridos);
+                $interesDevengado = round(($montoInteresCuota * $diasDevengados) / $periodoLength, 2);
 
+                $diasMora = 0; // No hay mora si no ha vencido la cuota
+            }
+
+            // Calcular mora devengada
+            $tasaMoraDiaria = $ajuste->mora / 100;
+            $moraCuotaActual = $cuotaActual->monto_cuota ?? 0;
+            $moraDevengada = round($moraCuotaActual * $tasaMoraDiaria * $diasMora, 2);
         }
 
+        // Total a pagar para liquidar el prestamo hoy
+        $totalLiquidacion = round($totalCapitalRestante + $interesDevengado + $moraDevengada, 2);
+
         return [
-            'cuota_actual' => $cuotaActual,
-            'total_capital_restante' => $totalCapitalRestante,
-            'total_cuotas_restantes' => $totalCuotasRestantes,
-            'fechaVencimiento' => $fechaVencimiento ?? null,
-            'montoInteresCuota' => $montoInteresCuota ?? 0,
-            'ultimoPagoPagado' => $ultimoPagoPagado ?? null,
-            'periodoInicio' => $periodoInicio ?? null,
+           'pagosPendientes' => $pagosPendientes,
+           'capital_restante' => round($totalCapitalRestante, 2),
+           'interes_devengado' => $interesDevengado,
+           'dias_devengados' => $diasDevengados,
+           'dias_mora' => $diasMora,
+           'tasa_mora_diaria' => $tasaMoraDiaria ?? 0,
+           'dias_gracia' => $ajuste->dias_gracia,
+           'monto_cuota_actual' => $cuotaActual->monto_cuota ?? 0,
+           'mora_devengada' => $moraDevengada,
+           'cuotas_restantes' => round($totalCuotasRestantes, 2),
+           'total_liquidacion' => $totalLiquidacion,
+
+           
         ];
 
     }
