@@ -308,9 +308,9 @@
 
                             <div class="flex items-center gap-3 mb-2">
 
-                                <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <div class="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
 
-                                    <i class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-lg"></i>
+                                    <i class="fas fa-hand-holding-usd text-red-600 dark:text-blue-400 text-lg"></i>
 
                                 </div>
                                 <div>
@@ -322,6 +322,48 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="grid grid-cols-1 gap-3">
+                            <div
+                                class="p-4 rounded-lg bg-rose-50 fark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
+                                <p class="text-xs uppercase text-rose-700 dark:text-rose-300">
+                                    Capital restante
+                                </p>
+                                <p class="text-base font-semibold text-gray-900 dark:text-white">
+                                    {{ $divisa }}
+                                    {{ number_format($liquidacion['capital_restante'] ?? 0, 2) }}
+                                </p>
+                            </div>
+                            <div
+                                class="p-4 rounded-lg bg-slate-50 dark:bg-neutral-900/40 border border-slate-200 dark:border-slate-700">
+                                <p class="text-xs uppercase text-gray-400">Mora devengada</p>
+                                <p class="text-base font-semibold text-gray-900 dark:text-white">{{ $divisa }}
+                                    {{ number_format($liquidacion['mora_devengada'] ?? 0, 2) }}</p>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    ({{ $liquidacion['dias_mora'] ?? 0 }} días de mora después de
+                                    {{ $liquidacion['dias_gracia'] ?? 0 }} días de gracia)
+                                </p>
+                            </div>
+                            <div
+                                class="p-4 rounded-lg bg-slate-50 dark:bg-neutral-900/40 border border-slate-200 dark:border-slate-700">
+                                <p class="text-xs uppercase text-gray-400">Interés devengado</p>
+                                <p class="text-base font-semibold text-gray-900 dark:text-white">{{ $divisa }}
+                                    {{ number_format($liquidacion['interes_devengado'] ?? 0, 2) }}</p>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    (Basado en {{ $liquidacion['dias_devengados'] ?? 0 }} días del periodo actual.)
+                                </p>
+                                <p class="text-xs text-gray-500 my-1">
+                                    Cálculo de interés: Cuota actual x (días transcurridos / días del periodo).
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 rounded-lg bg-slate-50 dark:bg-neutral-900/40 border border-slate-200 dark:border-slate-800">
+                            <p class="text-xs uppercase text-gray-400">Total a pagar</p>
+                            <p class="text-base font-semibold text-gray-900 dark:text-white">{{ $divisa }}
+                                {{ number_format($liquidacion['total_liquidacion'] ?? 0, 2) }}</p>
+                        </div>
+
                     </div>
                 </flux:modal>
 

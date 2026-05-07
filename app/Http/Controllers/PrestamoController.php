@@ -211,7 +211,7 @@ class PrestamoController extends Controller
            'dias_devengados' => $diasDevengados,
            'dias_mora' => $diasMora,
            'tasa_mora_diaria' => $tasaMoraDiaria ?? 0,
-           'dias_gracia' => $ajuste->dias_gracia,
+           'dias_gracia' => $ajuste->dias_de_gracia,
            'monto_cuota_actual' => $cuotaActual->monto_cuota ?? 0,
            'mora_devengada' => $moraDevengada,
            'cuotas_restantes' => round($totalCuotasRestantes, 2),
